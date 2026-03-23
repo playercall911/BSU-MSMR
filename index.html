@@ -1,0 +1,1720 @@
+<!DOCTYPE html><html lang="ko"><head><meta charset="UTF-8"><title>Blow Something Up, Marshmary!</title><style>
+  @font-face {
+      font-family: 'Pretendard';
+      src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/pretendard@1.0/Pretendard-Regular.woff2') format('woff2');
+      font-weight: 400;
+      font-display: swap;
+  }	
+  body {margin:0; padding:0;}
+  #cocoback {position:relative; line-height: 1; font-family: 'Pretendard', 'NanumBarunGothic', 'NanumGothic', sans-serif;}
+  #cocoback p {position:relative; color:#fff; font-size: 16px;}
+  #tr_top { position:fixed; z-index:2; padding: 15px 3%; width:94%; height: 30px; background: #212121; display: flex; align-items: center; justify-content: space-between; top:0; }
+  #tr_top a { font-weight:bold; color:#fff; text-decoration: none; font-size: 20px; }
+  #tr_top a:hover {color: #ae70ff;} 
+  .content { padding-top: 60px; background:#212121;}
+  .tcimg { width:100%; max-width:1200px; display: block; margin: 0 auto; }
+  
+  .player { position:relative; padding: 11px 15px 11px 65px; line-height: 1.9; letter-spacing: -0.01em; border-top: 1px solid rgba(255,255,255,0.12); margin:0; }
+  .player b { display: block; line-height: 1; font-size: 0.98em; margin-bottom: 5px; color:#888888; }
+  .player:after {
+      display: none;
+      width:40px;
+      height:40px;
+      position:absolute;
+      top:20px;
+      left:15px;
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
+  }
+  
+  .tab {position: relative; overflow: hidden; background: #666;}
+  .tabtitle {position: absolute; left: 10px; top: 10px; z-index: 1; padding: 7px; border-radius: 5px; background: #ffffff; font-size: 12px; font-weight: bold; color: #333; max-width: 23px; overflow: hidden;}
+  .tabMain .tabtitle, .tabTalk .tabtitle {display:none;}
+  .tabMain .player {min-height: 50px; padding: 20px 15px 11px 65px;}
+  .tabMain .player:after {display: block;}
+  
+  .tabMain { background: #2c2c2c; } 
+  .tabInfo { background: #455a64; } 
+  
+  .tabSecret {border-left: 10px solid #ae70ff; border-top: 1px solid rgba(255, 255, 255, 0.3); background: #000;}
+  .tabSecret .tabtitle { padding: 5px 15px; font-size: 12px; width: fit-content; max-width:none; margin-bottom: 9px; position: relative; background: #ae70ff;} 
+  .tabSecret .player b { font-size:13px; color:#999!important; display:inline; margin-right: 10px;}
+  .tabSecret .continued-line b {display:inline!important; visibility: hidden;}
+  .tabSecret .tabtitle + .player {border-top: 0;}
+  
+  #cocoback .tabTalk p { font-size: 0.85em; } 
+  .tabTalk { background: #424242; } 
+  .tabTalk .player b { font-size:13px; color:#999!important; display:inline; margin-right: 10px;}
+  .tabTalk .continued-line b {display:inline!important; visibility: hidden;}
+  
+  .p_c_gm b, .p_c_gmdesc b { display:none; } 
+  .tabMain .p_c_gm { padding: 11px 15px 11px 65px; min-height: unset; background: #333; } 
+  .tabMain .p_c_gmdesc { padding: 11px 15px 11px 15px; min-height: unset; text-align:center; background: #5b5b5b; } 
+  .p_system { text-align:center; font-size: 0.85em!important; color: #ddd; padding-left: 15px!important; display: flex; flex-direction: column; align-items: center;} 
+  .p_system b { color:#fff!important; background:#999; width: fit-content; padding: 0 10px; margin-bottom: 10px; border-radius:25px;}
+  
+  .hidden-tab { display: none !important; } 
+  #tabToggleButtons { display: flex; gap: 5px; }
+  .toggle-switch { cursor: pointer; font-size: 12px; display: flex; align-items: center; background: #333; padding: 5px 7px; border-radius: 20px; color:#fff; accent-color:#ae70ff; }
+  
+  span.dice-line { background-color: #111; font-size: 0.85em; padding: 5px 20px; border-radius: 5px; border: 2px solid rgba(255, 255, 255, 0.3); display: inline-block; margin: 5px 0; }
+  
+  .continued-line b, .continued-line:after { display: none!important; }
+  .continued-line { margin-top: -12px!important; padding-top: 0px !important; border-top: none!important; min-height: unset!important;}
+  
+  .p_c1:after { background-image: url('https://i.imgur.com/DsYpuEf.jpeg') !important; 
+   content:'';
+   display:block;
+  }
+  .p_c1 b { color: #3F51B5 !important; }
+  
+  /* 여기 수정 */
+  .p_c2:after { background-image: url('https://i.imgur.com/EzDMvd4.png') !important; 
+   content:'';
+   display:block;
+  }
+  .p_c2 b { color: #6F94E8 !important; }
+  
+  .p_c3 b { color: #9e9e9e !important; }
+  
+  @font-face {
+      font-family: 'ChosunIlboMyungjo';
+      src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_one@1.0/Chosunilbo_myungjo.woff') format('woff');
+      font-weight: normal;
+      font-display: swap;
+  }
+  #cocoback {font-family: 'ChosunIlboMyungjo', 'Noto Serif KR', 'Nanum Myeongjo', serif;} /*기본폰트설정*/
+  #cocoback p {color:#000000;} /*기본 글자색*/
+  
+  /*==상단 제목바==*/
+  #tr_top { background: #ffffff; }
+  #tr_top a { color:#000000; }
+  #tr_top a:hover {color: #5aa9ff;} 
+  
+  .content {background:#f6f6f6;} /*기본 배경색*/
+  
+  .player {padding: 11px 15px 11px 65px!important; border-top: 1px solid rgba(0,0,0,0.1);} /*발언 기본 설정*/
+  .tt_article_useless_p_margin p {padding-top: 11px !important; padding-bottom: 11px !important;} /*티스토리깨짐방지*/
+  .player b { color:#555555; } /*발언자 이름 설정*/
+  .player:after { border-radius: 25px; } /*발언자 두상 둥글게*/
+  
+  /*==탭 기본 설정==*/
+  .tab {background: #eaf4ff;} 
+  .tabtitle { background: #ffffff; color: #333333; }
+  
+  .tabMain .player {padding: 20px 15px 11px 65px!important;} /*메인탭 발언 여백*/
+  
+  .tabMain { background: #ffffff; } /*메인탭 배경색*/
+  .tabInfo { background: #dbdbdb; } /*정보탭 배경색*/
+  
+  /*==비밀 탭 설정==*/
+  .tabSecret {border-left: 10px solid #5aa9ff; border-top: 1px solid #5aa9ff96; background: #e1e1e1;}
+  .tabSecret .tabtitle { background: #5aa9ff;} 
+  .tabSecret .player b { color:#222222!important;}
+  
+  /*==잡담 탭 설정==*/
+  .tabTalk { background: #e4e0f1; } 
+  .tabTalk .player b { color:#222222!important; }
+  
+  /*== gm,나레이션 발언 설정==*/
+  .p_c_gm b, .p_c_gmdesc b { display:none; } 
+  .tabMain .p_c_gm { padding: 11px 15px 11px 65px!important; background: #f5f4f7; } 
+  .tabMain .p_c_gmdesc { padding: 11px 15px 11px 15px!important; background: #eef5ff; } 
+  
+  /*==시스템 발언 설정==*/
+  .p_system { color: #555555; } 
+  .p_system b { background:#5aa9ff; }
+  
+  .toggle-switch { background: #eeeeee; color:#333333; accent-color:#5aa9ff; } /*우측상단 탭버튼*/
+  
+  span.dice-line { background: #f2f8ff; border: 2px solid #5aa9ff;} /*주사위*/
+  
+  /*==연속 발언 처리==*/
+  #cocoback .continued-line { margin-top: -12px!important; padding-top: 0px !important; border-top: none!important; min-height: unset!important;}
+  .tt_article_useless_p_margin p.continued-line {margin-top: -12px !important;}/*티스토리깨짐방지*/
+  
+  /* chapter title emphasis */
+  .player.chapter-title {
+      font-weight: 700;
+      font-size: 1.12em;
+      text-align: center;
+      letter-spacing: 0.02em;
+      margin-top: 22px !important;
+      margin-bottom: 22px !important;
+      padding-top: 18px !important;
+      padding-bottom: 18px !important;
+      border-top: 1px solid rgba(90,169,255,0.35) !important;
+      border-bottom: 1px solid rgba(90,169,255,0.35) !important;
+      background: #f2f8ff !important;
+  }
+  .player.chapter-title b,
+  .player.chapter-title:after {
+      display: none !important;
+  }
+  #cocoback .continued-line.chapter-title {
+      margin-top: 22px !important;
+      padding-top: 18px !important;
+      border-top: 1px solid rgba(90,169,255,0.35) !important;
+      min-height: unset !important;
+  }
+  
+  </style></head><body><div id="cocoback"><div id="tr_top"><a href="#">Blow Something Up, Marshmary!</a><div id="tabToggleButtons"></div></div><div class="content"><img src="https://i.imgur.com/68nfum7.png" class="tcimg"><div class="tab tabMain"><div class="tabtitle">메인</div><p class="player p_c_gmdesc"><b>⦿</b>
+      ⋯
+  </p><p class="player continued-line p_c_gmdesc"><b>⦿</b>
+    한낮, 오후 3시, 분침과 초침이 조금도 이탈하지 않은 정각. 
+  </p><p class="player continued-line p_c_gmdesc"><b>⦿</b>
+    당신은 테러리스트에게 납치되어, 팔다리가 묶인 채 시계를 바라보고 있습니다. 
+  </p><p class="player continued-line p_c_gmdesc"><b>⦿</b>
+    옆에 있는 이치노세도 그리 다른 입장은 아니지만, 당신보다 상황이 조금 더 나쁩니다. 
+  </p><p class="player continued-line p_c_gmdesc"><b>⦿</b>
+    몸 가운데에 폭탄이 달려 있거든요. 
+  </p><p class="player continued-line p_c_gmdesc"><b>⦿</b>
+    두 사람을 납치한 테러리스트는 말합니다. 
+  </p><p class="player continued-line p_c_gmdesc"><b>⦿</b>
+    폭탄은 4시에 터진다고. 
+  </p><p class="player continued-line p_c_gmdesc"><b>⦿</b>
+       
+  </p><p class="player continued-line p_c_gmdesc"><b>⦿</b>
+    ⋯ 
+  </p><p class="player continued-line p_c_gmdesc"><b>⦿</b>
+            「BLOW SOMETHING UP」 
+  </p><p class="player continued-line p_c_gmdesc"><b>⦿</b>
+                 KPC  이치노세 아키노리 
+  </p><p class="player continued-line p_c_gmdesc"><b>⦿</b>
+                     PC   아리야마 슈리 
+  </p><p class="player continued-line p_c_gmdesc"><b>⦿</b>
+    ⋯ 
+  </p><p class="player continued-line p_c_gmdesc"><b>⦿</b>
+      
+  </p><p class="player chapter-title continued-line p_c_gmdesc"><b>⦿</b>
+            「CHAPTER. 클리셰적 탈출」 
+  </p><p class="player continued-line p_c_gmdesc"><b>⦿</b>
+    한낮, 오후 3시, 분침과 초침이 조금도 이탈하지 않은 정각. 
+  </p><p class="player continued-line p_c_gmdesc"><b>⦿</b>
+    당신은 테러리스트에게 납치되어, 팔다리가 묶인 채 시계를 바라보고 있습니다. 
+  </p><p class="player continued-line p_c_gmdesc"><b>⦿</b>
+    옆에 있는 이치노세도 그리 다른 입장은 아니지만, 당신보다 상황이 조금 더 나쁩니다. 
+  </p><p class="player continued-line p_c_gmdesc"><b>⦿</b>
+    몸 가운데에 폭탄이 달려 있거든요. 
+  </p><p class="player continued-line p_c_gmdesc"><b>⦿</b>
+    테러리스트는 바깥에 있는 경찰들을 향해 이 폭탄은 4시에 터지며,  
+  </p><p class="player continued-line p_c_gmdesc"><b>⦿</b>
+    인명피해를 줄이고 싶다면 자신의 요구조건을 받아달라는 말을 지껄이는 중입니다. 
+  </p><p class="player continued-line p_c_gmdesc"><b>⦿</b>
+    ...잠시, 요구조건이라는 게 어떤 거였죠? 
+  </p><p class="player continued-line p_c_gmdesc"><b>⦿</b>
+    [ 아리야마 슈리, 지능 판정 ] 
+  </p><p class="player p_c1"><b>아리야마 슈리</b><span class="dice-line">
+    cc&lt;=65 지능 (1D100&lt;=65) ＞ 74 ＞ Failure
+  </span></p><p class="player p_c_gmdesc"><b>⦿</b>
+    ...요구조건이 무엇인지는 기억나는 바가 없습니다. 
+  </p><p class="player continued-line p_c_gmdesc"><b>⦿</b>
+    이상한 일이네요. 
+  </p><p class="player continued-line p_c_gmdesc"><b>⦿</b>
+    기억나지도 않는 요구조건 때문에 잡혀 왔단 말인가요. 
+  </p><p class="player continued-line p_c_gmdesc"><b>⦿</b>
+    그리고 당신은, 문득 여기까지 오기까지의 과정도 영 모호하다는 사실을 깨닫습니다. 
+  </p><p class="player continued-line p_c_gmdesc"><b>⦿</b>
+    당신과 이치노세는 문의 악마 소탕 작전 이후 함께 임무를 나갈 일이 없었지 않나요. 
+  </p><p class="player continued-line p_c_gmdesc"><b>⦿</b>
+    이상할 만큼 뇌 안이 망가져 있습니다.  
+  </p><p class="player continued-line p_c_gmdesc"><b>⦿</b>
+    기절을 위해 쓴 약품의 부작용일까요? 
+  </p><p class="player p_c1"><b>아리야마 슈리</b>
+    (나도 나이가 든 걸까. 아니면 이 일에 지독히 익숙해진 탓일까. 기억이 흐릿하다. 당장 오늘 먹은 아침밥도 생각이 안 나는데...) 
+  </p><p class="player continued-line p_c1"><b>아리야마 슈리</b>
+    (혹시 약물 부작용...? 그런 생각을 이어가다보면 한가지 결론에 도달한다. 트리거를 당기면 해결되겠구나! 왼손 약지를 꺾을 수 있는 상황인가?) 
+  </p><p class="player p_c_gmdesc"><b>⦿</b>
+    트리거를 당길 수 있는 상황은 아닙니다. 
+  </p><p class="player continued-line p_c_gmdesc"><b>⦿</b>
+    이치노세와 같이, 당신도 결박되어 양 손을 잡기는 무리네요. 
+  </p><p class="player continued-line p_c_gmdesc"><b>⦿</b>
+    밧줄로 묶인 손목과 발목을 풀어내는 게 기억을 찾는 것보다 급선무일 것 같습니다. 
+  </p><p class="player continued-line p_c_gmdesc"><b>⦿</b>
+    [ 아리야마 슈리, 결박을 풀고자 한다면 관찰 판정 ] 
+  </p><p class="player p_c1"><b>아리야마 슈리</b><span class="dice-line">
+    cc&lt;=45 관찰력 (1D100&lt;=45) ＞ 19 ＞ Success
+  </span></p><p class="player p_c_gmdesc"><b>⦿</b>
+    이곳은 사무실입니다. 
+  </p><p class="player continued-line p_c_gmdesc"><b>⦿</b>
+    당신은, 당신 뒤쪽 테이블의 커터칼을 발견합니다. 
+  </p><p class="player continued-line p_c_gmdesc"><b>⦿</b>
+    [ 아리야마 슈리, 커터칼을 쥐고 싶다면 은밀행동 판정 ] 
+  </p><p class="player p_c1"><b>아리야마 슈리</b><span class="dice-line">
+    cc&lt;=70 은밀행동 (1D100&lt;=70) ＞ 16 ＞ Success
+  </span></p><p class="player continued-line p_c1"><b>아리야마 슈리</b>
+    (점마들 왜 이렇게 허술해?) 
+  </p><p class="player p_c_gmdesc"><b>⦿</b>
+    당신은 열심히... 
+  </p><p class="player continued-line p_c_gmdesc"><b>⦿</b>
+    다리로 의자를 밀어봅니다. 
+  </p><p class="player continued-line p_c_gmdesc"><b>⦿</b>
+    조금 추한 꼴이긴 하지만, 버둥대며 책상에 가까이 가는 것에 성공했네요. 
+  </p><p class="player continued-line p_c_gmdesc"><b>⦿</b>
+    테러리스트들은 알아챌 기미가 없어 보입니다. 
+  </p><p class="player continued-line p_c_gmdesc"><b>⦿</b>
+    결국 당신은 커터칼을 손에 넣는 것에 성공합니다! 
+  </p><p class="player continued-line p_c_gmdesc"><b>⦿</b>
+    어떻게 할까요? 
+  </p><p class="player p_c1"><b>아리야마 슈리</b>
+    (손에 살포시 쥐고 우선 다시 제자리로 돌아온다... 힘들다.) 
+  </p><p class="player p_c_gmdesc"><b>⦿</b>
+    당신은 버둥거리며 다시 제자리로 돌아옵니다. 
+  </p><p class="player p_c1"><b>아리야마 슈리</b>
+    (그대로 조심스럽게 결박 부위에 날을 문질러 본다.) 
+  </p><p class="player p_c_gmdesc"><b>⦿</b>
+    커터칼은 다행히도 억센 밧줄에 부드럽게 잘 듭니다. 
+  </p><p class="player continued-line p_c_gmdesc"><b>⦿</b>
+    그렇게 결박을 풀어낸 당신이 일어서기 직전에... 
+  </p><p class="player continued-line p_c_gmdesc"><b>⦿</b>
+    테러리스트는 베란다 쪽으로 나갑니다. 
+  </p><p class="player continued-line p_c_gmdesc"><b>⦿</b>
+    밖에 있을 경찰과의 원활한 협상을 위한 거죠. 
+  </p><p class="player continued-line p_c_gmdesc"><b>⦿</b>
+    투항하라고 외치는 경찰에게 자신의 요구조건을 외쳐대는데 잘 들리진 않습니다. 
+  </p><p class="player continued-line p_c_gmdesc"><b>⦿</b>
+    어쨌든 다행인 것은 그가 완전히 뒤돌고 있고, 이쪽을 바로 볼 일은 없을 것 같단 거예요. 
+  </p><p class="player p_c1"><b>아리야마 슈리</b>
+    (나간 김에 담배도 빨고 들어와라. 제발. 그런 생각을 하며 천천히 몸 일으켜 아키노리 쪽으로 다가갔다.) 
+  </p><p class="player continued-line p_c1"><b>아리야마 슈리</b>
+    (꼬라지 하고는... 입모양만 뻐끔댔을까.) 
+  </p><p class="player p_c_gmdesc"><b>⦿</b>
+    당신이 다가오자... 
+  </p><p class="player p_c2"><b>이치노세 아키노리</b>
+    —!! 
+  </p><p class="player p_c_gmdesc"><b>⦿</b>
+    그는 무언의 항의와 함께 제 손목을 향해 고갯짓합니다. 
+  </p><p class="player p_c1"><b>아리야마 슈리</b>
+    풀지 말라고? (속닥댄다. 폭탄이랑 함께하는 몸이셔서 어떻게 해야할지를 모르겠네.) 
+  </p><p class="player p_c_gmdesc"><b>⦿</b>
+    이치노세의 눈에서 읽히는 욕설이 한층 더 격렬해집니다. 
+  </p><p class="player continued-line p_c_gmdesc"><b>⦿</b>
+    역시 입에 붙은 테이프 정도는 떼 주는 게 좋을 것 같아요. 
+  </p><p class="player p_c1"><b>아리야마 슈리</b>
+    (망설임 없이 한번에 쫙 떼어낸다. 좀 아플듯.) 
+  </p><p class="player p_c2"><b>이치노세 아키노리</b>
+    윽... (눈 질끈 감았다 뜬다.) 
+  </p><p class="player continued-line p_c2"><b>이치노세 아키노리</b>
+    (베란다에 나간 테러범의 눈치를 살피더니 속삭였다.) 바로 안 떼주고 뭐 해... (한숨.) 
+  </p><p class="player p_c1"><b>아리야마 슈리</b>
+    아니... 굳이 주둥아리가 필요할까 싶어서...(또 내 탓하네?) 
+  </p><p class="player continued-line p_c1"><b>아리야마 슈리</b>
+    풀어줄테니까 움직이지 말아봐. 찌를까봐 겁난다... (손목 결박에 칼 문댕문댕) 
+  </p><p class="player p_c2"><b>이치노세 아키노리</b>
+    (별 말 없이 손목이 자유로워지길 기다렸다. 작게 한숨소리가 들렸을지도.) 
+  </p><p class="player p_c_gmdesc"><b>⦿</b>
+    그렇게 이치노세의 손목도 자유를 얻었습니다. 
+  </p><p class="player continued-line p_c_gmdesc"><b>⦿</b>
+    그러나 그에게는 결박이나 테이프 이외의 문제가 하나 더 있었죠. 
+  </p><p class="player continued-line p_c_gmdesc"><b>⦿</b>
+    심장 부근에 설치된 폭탄. 
+  </p><p class="player continued-line p_c_gmdesc"><b>⦿</b>
+    사무실 시계를 확인하니 지금은 3시 10분이고 폭탄이 터지기까지 남은 시간은 50분입니다. 
+  </p><p class="player p_c2"><b>이치노세 아키노리</b>
+    이제 문제는... (시선이 제 가슴께로 향한다.) 
+  </p><p class="player p_c1"><b>아리야마 슈리</b>
+    (시선이 함께 따라간다.) 내가 폭탄 전문가는 아닌 거 알지. 
+  </p><p class="player p_c2"><b>이치노세 아키노리</b>
+    (즉시 끄덕였다.) 내가 알아. 아까 저쪽의 동료로 보이는 자가 나불거렸거든. 
+  </p><p class="player continued-line p_c2"><b>이치노세 아키노리</b>
+    오른쪽 하단을 보면 열 수 있는 부분이 있는데... (말하기와 동시에 그곳을 열었다. 거침없다.) 
+  </p><p class="player continued-line p_c2"><b>이치노세 아키노리</b>
+    거길 뜯어내면 선 세 개가 있을 거라 했고. 
+  </p><p class="player p_c_gmdesc"><b>⦿</b>
+    그의 말대로 세개의 선이 보입니다. 
+  </p><p class="player p_c1"><b>아리야마 슈리</b>
+    (눈썹 잠시 까딱인다. 오, 열리네. 오, 선 세 개.) 
+  </p><p class="player p_c2"><b>이치노세 아키노리</b>
+    그중 하나를 자르면 기폭장치가 멈춘다더라. 
+  </p><p class="player p_c1"><b>아리야마 슈리</b>
+    그 하나가 뭔데? 
+  </p><p class="player p_c_gmdesc"><b>⦿</b>
+    보이는 것은 빨간색, 노란색, 파란색의 전선. 
+  </p><p class="player continued-line p_c_gmdesc"><b>⦿</b>
+    수많은 클리셰를 바탕으로 당신은 직감적으로 알고 있습니다. 
+  </p><p class="player continued-line p_c_gmdesc"><b>⦿</b>
+    제대로 된 하나를 자르면 기폭장치는 멈추지만, 잘못된 두 개 중 하나를 자르면 폭탄은 바로 터지겠죠. 
+  </p><p class="player p_c2"><b>이치노세 아키노리</b>
+    그 하나가 뭔지는 말 안 하던데. 
+  </p><p class="player continued-line p_c2"><b>이치노세 아키노리</b>
+    운에 맡겨 볼까? (웃었다.) 
+  </p><p class="player p_c1"><b>아리야마 슈리</b>
+    미쳤네. 너나 나나 공안의 언럭키 가이라고 소문난 사람들이잖아. 
+  </p><p class="player continued-line p_c1"><b>아리야마 슈리</b>
+    차라리 (베란다 쪽 고개로 까딱였다.) 저 놈을 살짝 괴롭혀서 정확한 선을 알아내겠어. 
+  </p><p class="player p_c2"><b>이치노세 아키노리</b>
+    (언럭키 가이...) 그래서 해볼 만 하다고 말하면 또 화 낼 건가? 
+  </p><p class="player continued-line p_c2"><b>이치노세 아키노리</b>
+    네 능력은 알지만... 동료가 꽤 많은 것 같았어서, 괜히 자극하는 쪽은 피하고 싶은데.  
+  </p><p class="player p_c1"><b>아리야마 슈리</b>
+    잔인하네...(답답한 기분이 든다. 폭탄 금속제 부분 검지로 톡톡 친다.) 만약 터진다면 나야 다시 살아나면 된다지만 너는 그대로 끝인걸.  
+  </p><p class="player continued-line p_c1"><b>아리야마 슈리</b>
+    (잠시 말을 고르다) ...빨간색으로. 굳이 고른다면 그게 나을 것 같다. 
+  </p><p class="player p_c2"><b>이치노세 아키노리</b>
+    ...하하. 
+  </p><p class="player continued-line p_c2"><b>이치노세 아키노리</b>
+    그럼 부탁할게. 
+  </p><p class="player continued-line p_c2"><b>이치노세 아키노리</b>
+    하나, 둘... (숨을 골랐다. 심장박동이 빨라지는 것이 느껴졌다. 평생을 염원하던 것에 대한 흥분인지, 혹은 두려움인지 모를 일이었다. 아마 네게도 들리겠지?)  
+  </p><p class="player continued-line p_c2"><b>이치노세 아키노리</b>
+    셋. (싱긋 웃었다. 이번에야말로 네가 내 윤회를 끝내 줄 수도...) 
+  </p><p class="player p_c1"><b>아리야마 슈리</b>
+    (하나, 빨간색 선을 손에, 그리 억세진 않게 쥔다. 둘, 데블 헌터에게 이만큼의 시간이 남아있다는 것은 엄청난 행운이다. 사실 이런 순간순간에 평생 쓸 운을 다 끌어다 썼기에 나의 인생이 불운의 연속처럼 느껴지는 것은 아닐까? 박동 소리에 귀를 기울이며 그런 생각을 했다...) 
+  </p><p class="player continued-line p_c1"><b>아리야마 슈리</b>
+    (셋.) 
+  </p><p class="player continued-line p_c1"><b>아리야마 슈리</b>
+    (... ...넷, 여전히 미동 없다. 잠시 말없이 눈 감고 있었을까. 네 손 천천히 끌어다 빨간색 선 넘겨준다.) 이런 선택까지 나에게 떠넘길 셈이야? 
+  </p><p class="player continued-line p_c1"><b>아리야마 슈리</b>
+    네가 해. 
+  </p><p class="player p_c2"><b>이치노세 아키노리</b>
+    (짧게 숨 들이켰다.) ...네가 해 줘. 
+  </p><p class="player continued-line p_c2"><b>이치노세 아키노리</b>
+    '아무나'는 안 돼. 나 자신조차도... 
+  </p><p class="player continued-line p_c2"><b>이치노세 아키노리</b>
+    (아마도 자신의 모든 불운은 너라는 행운을 위한 초석이었을 것이다.) 
+  </p><p class="player continued-line p_c2"><b>이치노세 아키노리</b>
+    너였으면 좋겠어, 슈리. 
+  </p><p class="player p_c1"><b>아리야마 슈리</b>
+    네 인생의 주체는 너야.  
+  </p><p class="player p_c2"><b>이치노세 아키노리</b>
+    그게 뭐가 어쨌다는 거야. 
+  </p><p class="player continued-line p_c2"><b>이치노세 아키노리</b>
+    마지막 부탁일지도 모르는데. 안 들어줄 거야? 
+  </p><p class="player p_c1"><b>아리야마 슈리</b>
+    그래... 우리 이치노세 아키노리 씨가 무슨 바람이 들었는지 지금 와서야 부탁 씩이나 하시는군. 
+  </p><p class="player continued-line p_c1"><b>아리야마 슈리</b>
+    네 인생의 주인이 너라고 하는 게 뭐 그렇게 불온한 사상이라고... 내가 지금 여기서 할 수 있는 일이 어디있어? 
+  </p><p class="player continued-line p_c1"><b>아리야마 슈리</b>
+    네가 해. 나 말고. 너. 네 인생의 고작일 뿐인 사람한테 맡기지 말고. 
+  </p><p class="player continued-line p_c1"><b>아리야마 슈리</b>
+    그래도 같이는 있어줄테니까... 
+  </p><p class="player p_c2"><b>이치노세 아키노리</b>
+    ... (말없이 너를 응시하다가 커터칼을 뺏어 간다.) 
+  </p><p class="player continued-line p_c2"><b>이치노세 아키노리</b>
+    못됐네, 아리야마. (그리고는...) 
+  </p><p class="player continued-line p_c2"><b>이치노세 아키노리</b>
+    (파란 선을 잘랐다.) 
+  </p><p class="player p_c_gmdesc"><b>⦿</b>
+    찰칵! 
+  </p><p class="player continued-line p_c_gmdesc"><b>⦿</b>
+    하나도 경쾌하지 않은, 끔찍한 소리가 울리자……. 
+  </p><p class="player continued-line p_c_gmdesc"><b>⦿</b>
+    사방이 조용합니다. 
+  </p><p class="player continued-line p_c_gmdesc"><b>⦿</b>
+    ⋯ 
+  </p><p class="player continued-line p_c_gmdesc"><b>⦿</b>
+    그래. 
+  </p><p class="player continued-line p_c_gmdesc"><b>⦿</b>
+    조용합니다. 
+  </p><p class="player continued-line p_c_gmdesc"><b>⦿</b>
+    불행인지 다행인지. 이치노세는 성공했습니다. 
+  </p><p class="player continued-line p_c_gmdesc"><b>⦿</b>
+    잘라낸 선은 틀리지 않았으며 폭탄은 조용히 죽어버렸어요.  
+  </p><p class="player p_c1"><b>아리야마 슈리</b>
+    ... ... 
+  </p><p class="player p_c2"><b>이치노세 아키노리</b>
+    ...하. 
+  </p><p class="player p_c1"><b>아리야마 슈리</b>
+    그거 떼어내고 있어봐. (손 휘적대며 베란다 쪽으로 몸 틀었다.) 
+  </p><p class="player p_c2"><b>이치노세 아키노리</b>
+    ... ... (대충 끄덕였다.) 
+  </p><p class="player p_c1"><b>아리야마 슈리</b>
+    (베란다 쪽에 서 있던 테러리스트를 향해 목을 휘감듯 초크를 걸었다.) 좃뺑이 쳤잖아... 
+  </p><p class="player p_c_gmdesc"><b>⦿</b>
+    당신이 백초크를 걸고 있으면, 뒤에서 목소리가 들립니다. 
+  </p><p class="player p_c2"><b>이치노세 아키노리</b>
+    그거 놓고 비켜 봐. 
+  </p><p class="player p_c1"><b>아리야마 슈리</b>
+    지금? 왜, 나 바쁜데. 
+  </p><p class="player p_c_gmdesc"><b>⦿</b>
+    뒤를 돌아본다면... 
+  </p><p class="player continued-line p_c_gmdesc"><b>⦿</b>
+    어느새 폭탄을 떼어내고, 넥타이도 조금 느슨해진 듯 한 이치노세가 의자를 공중에 높이 들고 서 있습니다. 
+  </p><p class="player p_c2"><b>이치노세 아키노리</b>
+    하나. 
+  </p><p class="player continued-line p_c2"><b>이치노세 아키노리</b>
+    둘. 
+  </p><p class="player continued-line p_c2"><b>이치노세 아키노리</b>
+    셋. 
+  </p><p class="player continued-line p_c2"><b>이치노세 아키노리</b>
+    비켜. 
+  </p><p class="player p_c1"><b>아리야마 슈리</b>
+    야. 
+  </p><p class="player p_c_gmdesc"><b>⦿</b>
+    그리고 그대로 테러범 쪽을 의자로 후렸습니다. 
+  </p><p class="player continued-line p_c_gmdesc"><b>⦿</b>
+    「쾅!」 
+  </p><p class="player continued-line p_c_gmdesc"><b>⦿</b>
+    [ 아리야마 슈리, 행운 판정 ] 
+  </p><p class="player p_c1"><b>아리야마 슈리</b><span class="dice-line">
+    cc&lt;=20 행운 (1D100&lt;=20) ＞ 47 ＞ Failure
+  </span></p><p class="player p_c_gmdesc"><b>⦿</b>
+    의자 다리에 같이 맞았는지, 당신도 조금 어지럽습니다. 
+  </p><p class="player continued-line p_c_gmdesc"><b>⦿</b>
+    흔들리는 시야로 테러범을 내려다보면... 
+  </p><p class="player continued-line p_c_gmdesc"><b>⦿</b>
+    그는 확실히 기절했고요. 
+  </p><p class="player continued-line p_c_gmdesc"><b>⦿</b>
+    피도 좀 나는 것 같은데 무시해도 좋겠습니다. 
+  </p><p class="player continued-line p_c_gmdesc"><b>⦿</b>
+    죽었을까요? 
+  </p><p class="player continued-line p_c_gmdesc"><b>⦿</b>
+    하지만 죽었대도 정당방위로 인정받을 거예요. 
+  </p><p class="player continued-line p_c_gmdesc"><b>⦿</b>
+    테러리스트가 기절하는 것을 보자마자 바깥에서 대기 중이던 경찰이 안쪽으로 들이닥칩니다. 
+  </p><p class="player continued-line p_c_gmdesc"><b>⦿</b>
+    아래쪽에서 잠시 소란이 일어난 것은 하나 더 있던 동료 탓이겠죠. 
+  </p><p class="player continued-line p_c_gmdesc"><b>⦿</b>
+    총소리가 몇 번 울리고, 무언가를 치고 때리는 소리가 실컷 난 뒤에 문을 열고 질서정연히 당신들의 앞으로 오는 경찰들. 
+  </p><p class="player continued-line p_c_gmdesc"><b>⦿</b>
+    어째 뭔가 경찰이 한 건 하나도 없지 않나? 싶을 때에 경찰 중 한 명이 그런 생각 말라는 듯 말을 걸어옵니다. 
+  </p><p class="player p_c3"><b>경찰관</b>
+    괜찮으십니까? 테러범들은 모두 체포되었습니다. 
+  </p><p class="player p_c1"><b>아리야마 슈리</b>
+    ... ... (테러범은 알 바없고 제 이마 손가락으로 더듬는다. 피 나나?) 
+  </p><p class="player continued-line p_c1"><b>아리야마 슈리</b>
+    예, 괜찮고요. (안 괜찮아.) 저 쪽 폭탄이나 한번 봐주세요. 제대로 해제된건지. 
+  </p><p class="player p_c3"><b>경찰관</b>
+    아, 그래야죠. 아마 확인 중일 겁니다. 
+  </p><p class="player p_c_gmdesc"><b>⦿</b>
+    그의 말대로, 이치노세 쪽에는 이미 다른 복장의 경찰관 몇이 붙어 있습니다. 
+  </p><p class="player continued-line p_c_gmdesc"><b>⦿</b>
+    폭탄과 더불어 그의 안위를 확인하는 듯 합니다. 
+  </p><p class="player p_c1"><b>아리야마 슈리</b>
+    (아키노리 쪽으로 천천히 걸어갔다. 경찰관들을 대충 비키게 한다.)  
+  </p><p class="player p_c2"><b>이치노세 아키노리</b>
+    (의아한 눈빛이 오간다. 뭔데?) 
+  </p><p class="player p_c1"><b>아리야마 슈리</b>
+    열 받으니까 한 대만 때릴게. 고마워. (이 상황에 방점을 찍듯 아키노리의 얼굴을 향해 주먹을 날렸다.) 
+  </p><p class="player p_c_gmdesc"><b>⦿</b>
+    [ 아리야마 슈리, 근접전 판정 ] 
+  </p><p class="player p_c1"><b>아리야마 슈리</b><span class="dice-line">
+    cc&lt;=90 근접전(격투) (1D100&lt;=90) ＞ 79 ＞ Success
+  </span></p><p class="player continued-line p_c1"><b>아리야마 슈리</b>
+     
+  </p><p class="player continued-line p_c1"><b>아리야마 슈리</b>
+     
+  </p><p class="player continued-line p_c1"><b>아리야마 슈리</b><span class="dice-line">
+    1D3+1D4 (1D3+1D4) ＞ 3[3]+4[4] ＞ 7
+  </span></p><p class="player p_system"><b>system</b>
+    [ 이치노세 아키노리 ] HP : 13 → 6 
+  </p><p class="player p_c_gmdesc"><b>⦿</b>
+    이치노세는 피하지 않았고, 그대로 뒤로 넘어집니다. 
+  </p><p class="player p_c2"><b>이치노세 아키노리</b>
+    (말없이 제 턱을 매만지다가 헛웃음을 뱉었다.) 아프잖아. 
+  </p><p class="player p_c_gmdesc"><b>⦿</b>
+    경찰관들이 한발 늦게 달라붙어 당신을 제지합니다 
+  </p><p class="player continued-line p_c_gmdesc"><b>⦿</b>
+    한마디로... 개판이네요. 
+  </p><p class="player p_c1"><b>아리야마 슈리</b>
+    예, 예에, 더 안 팹니다. 놔요. 
+  </p><p class="player p_c2"><b>이치노세 아키노리</b>
+    놔 주셔도 됩니다. 맞을 짓 했어요. (부축을 받아 일어나며 괜찮다는 듯 웃어 보였다.) 
+  </p><p class="player p_c3"><b>경찰관</b>
+    ... (의심스러운 눈초리로 아리야마를 놔 주었다.) 
+  </p><p class="player continued-line p_c3"><b>경찰관</b>
+    두...분 모두, 바로 근처 병원으로 이송해드리도록 하겠습니다. 
+  </p><p class="player p_c1"><b>아리야마 슈리</b>
+    (이것들도 공안 사람이었으면 존나 팼을텐데 조혼나 아쉽다.) 예. 
+  </p><p class="player p_c_gmdesc"><b>⦿</b>
+    약간의 의심이 있었지만, 이후는 사건 피해자에게 어울리는 진행이었습니다. 
+  </p><p class="player continued-line p_c_gmdesc"><b>⦿</b>
+    병원에 들러서 검사를 받고, 이상이 없다는 판정 후 집으로 귀가. 
+  </p><p class="player continued-line p_c_gmdesc"><b>⦿</b>
+    당신이 회복이 빠르다면 당장 내일부터 일상을 찾을 수 있을 것이고,  
+  </p><p class="player continued-line p_c_gmdesc"><b>⦿</b>
+    그렇지 않은 쪽이라면 일주일, 혹은 한 달 정도는 트라우마에 시달리겠죠. 
+  </p><p class="player continued-line p_c_gmdesc"><b>⦿</b>
+    현관문을 열고 안으로 들어섰는데도 아직 병원의 소독약 냄새가 코 근처에 남아있는 느낌이 듭니다. 
+  </p><p class="player continued-line p_c_gmdesc"><b>⦿</b>
+    하지만 집의 거실도, 창문도, 오늘 아침 소파에 걸쳐둔 채 나왔던 빨래도 모두 그대로. 
+  </p><p class="player continued-line p_c_gmdesc"><b>⦿</b>
+    환경이 당신을 이토록 감싸주고 있으니 필시 언젠가는 모든 것이 원상복구될 겁니다. 
+  </p><p class="player continued-line p_c_gmdesc"><b>⦿</b>
+    전부 원래대로 돌아올 거예요. 
+  </p><p class="player continued-line p_c_gmdesc"><b>⦿</b>
+    원래대로. 
+  </p><p class="player continued-line p_c_gmdesc"><b>⦿</b>
+    ⋯ 
+  </p><p class="player continued-line p_c_gmdesc"><b>⦿</b>
+    그런데 그 요구사항이란 거 정말로 뭐였을까? 
+  </p><p class="player continued-line p_c_gmdesc"><b>⦿</b>
+      
+  </p><p class="player chapter-title continued-line p_c_gmdesc"><b>⦿</b>
+        「CHAPTER. 클리셰적 탈출 실패」 
+  </p><p class="player continued-line p_c_gmdesc"><b>⦿</b>
+      
+  </p><p class="player continued-line p_c_gmdesc"><b>⦿</b>
+    한낮, 오후 3시. 
+  </p><p class="player continued-line p_c_gmdesc"><b>⦿</b>
+    분침과 초침이 조금도 이탈하지 않은 정각. 
+  </p><p class="player continued-line p_c_gmdesc"><b>⦿</b>
+    당신은 테러리스트에게 납치되어, 팔다리가 묶인 채 시계를 바라보고 있습니다. 
+  </p><p class="player continued-line p_c_gmdesc"><b>⦿</b>
+    옆에 있는 이치노세도 그리 다른 입장은 아니지만, 당신보다 상황이 조금 더 나쁩니다. 
+  </p><p class="player continued-line p_c_gmdesc"><b>⦿</b>
+    당신은 그 이유를 알고 있습니다. 
+  </p><p class="player continued-line p_c_gmdesc"><b>⦿</b>
+    몸 가운데에 폭탄이 달려 있거든요. 
+  </p><p class="player continued-line p_c_gmdesc"><b>⦿</b>
+    테러리스트는 바깥에 있는 경찰들을 향해 이 폭탄은 4시에... 
+  </p><p class="player continued-line p_c_gmdesc"><b>⦿</b>
+    ⋯ 
+  </p><p class="player continued-line p_c_gmdesc"><b>⦿</b>
+    아니, 당신은 이미 전부 알고 있습니다. 
+  </p><p class="player continued-line p_c_gmdesc"><b>⦿</b>
+    전부 원상복구될 거라고 생각하기야 했습니다만. 
+  </p><p class="player continued-line p_c_gmdesc"><b>⦿</b>
+    이런 식으로 돌아오기를 바란 건 또 아니었습니다. 
+  </p><p class="player continued-line p_c_gmdesc"><b>⦿</b>
+    이건 최악의 상황 앞으로 복귀한 거잖아요. 
+  </p><p class="player continued-line p_c_gmdesc"><b>⦿</b>
+    ...한가지 다행스러운 점은, 당신이 이미 파훼법을 알고 있다는 것입니다. 
+  </p><p class="player continued-line p_c_gmdesc"><b>⦿</b>
+    우선 하나. 
+  </p><p class="player continued-line p_c_gmdesc"><b>⦿</b>
+    결박은 어떻게 풀 수 있나요, 아리야마 슈리? 
+  </p><p class="player p_c1"><b>아리야마 슈리</b>
+    (...악마의 짓인가. 구두 굽을 직 끌어 커터칼이 놓인 책상으로 향했다.) 
+  </p><p class="player p_c_gmdesc"><b>⦿</b>
+    그리고 둘. 이치노세에게 붙어 있는 폭발물은 어떻게 무력화할까요? 
+  </p><p class="player p_c1"><b>아리야마 슈리</b>
+    (뚜껑을 열면 선 세 개가 나오는데, '아키노리'에게 파란색 선을 처 뜯게 시킨다.) 
+  </p><p class="player p_c_gmdesc"><b>⦿</b>
+    그래, 기억하고 있습니다. 
+  </p><p class="player continued-line p_c_gmdesc"><b>⦿</b>
+    그 기억이 꿈 속에서 일어난 것이었든 정말로 일어난 것이었든 간에. 
+  </p><p class="player continued-line p_c_gmdesc"><b>⦿</b>
+    당신이 떠올린 것들은 그 자리에 있었어야 할 퍼즐처럼 착실히 맞아들어갑니다. 
+  </p><p class="player continued-line p_c_gmdesc"><b>⦿</b>
+    떨어져 나가는 밧줄, 끊어지는 파란 선. 
+  </p><p class="player continued-line p_c_gmdesc"><b>⦿</b>
+    질서정연히 들어오는 경찰들, 잠깐의 소란과 구급차. 
+  </p><p class="player continued-line p_c_gmdesc"><b>⦿</b>
+    병원, 집의 거실도, 창문도, 오늘 아침 소파에 걸쳐둔 채 나왔던 빨래... 
+  </p><p class="player continued-line p_c_gmdesc"><b>⦿</b>
+    여전히 기억나지 않는 요구사항조차도 모두 그대로. 
+  </p><p class="player continued-line p_c_gmdesc"><b>⦿</b>
+    환경이 당신을 이토록 감싸주고 있으니 필시 언젠가는 모든 것이 원상복구될 겁니다. 
+  </p><p class="player continued-line p_c_gmdesc"><b>⦿</b>
+    전부 원래대로 돌아올 거예요. 
+  </p><p class="player continued-line p_c_gmdesc"><b>⦿</b>
+    반복되는 하루라니, 그런 게 있을 리가. 
+  </p><p class="player continued-line p_c_gmdesc"><b>⦿</b>
+    이전 기억이 꿈이었든가, 아니면 뇌의 신경세포 혼란으로 데자뷰 현상을 겪은 것에 지나지 않을 겁니다. 
+  </p><p class="player continued-line p_c_gmdesc"><b>⦿</b>
+    원래대로……. 
+  </p><p class="player continued-line p_c_gmdesc"><b>⦿</b>
+    ⋯⋯⋯. 
+  </p><p class="player continued-line p_c_gmdesc"><b>⦿</b>
+    ⋯⋯⋯. 
+  </p><p class="player continued-line p_c_gmdesc"><b>⦿</b>
+      
+  </p><p class="player continued-line p_c_gmdesc"><b>⦿</b>
+    이 생각을 하면 안 되는 거였을까? 
+  </p><p class="player continued-line p_c_gmdesc"><b>⦿</b>
+      
+  </p><p class="player continued-line p_c_gmdesc"><b>⦿</b>
+    다음날부터, 하루는 똑같이 반복됩니다. 
+  </p><p class="player continued-line p_c_gmdesc"><b>⦿</b>
+    그야말로 전부 ‘원래대로’ 돌아오고 맙니다. 
+  </p><p class="player continued-line p_c_gmdesc"><b>⦿</b>
+    데자뷰 따위가 아닌 건 이미 너무나도 확실해졌습니다. 
+  </p><p class="player continued-line p_c_gmdesc"><b>⦿</b>
+    이틀, 사흘, 나흘... 
+  </p><p class="player continued-line p_c_gmdesc"><b>⦿</b>
+    닷새, 엿새!  
+  </p><p class="player continued-line p_c_gmdesc"><b>⦿</b>
+    당신이 어쩔 수도 없이. 
+  </p><p class="player continued-line p_c_gmdesc"><b>⦿</b>
+    돌고 도는 하루. 
+  </p><p class="player continued-line p_c_gmdesc"><b>⦿</b>
+    어떻게 보면 직장생활을 하는 기분마저도 드는군요. 
+  </p><p class="player continued-line p_c_gmdesc"><b>⦿</b>
+    ⋯ 
+  </p><p class="player continued-line p_c_gmdesc"><b>⦿</b>
+    그리고 이레째의 한낮. 
+  </p><p class="player continued-line p_c_gmdesc"><b>⦿</b>
+    일곱 번째의 오후 3시 10분. 
+  </p><p class="player continued-line p_c_gmdesc"><b>⦿</b>
+    당신은 언제나처럼 이치노세의 결박을 풀어 주었습니다. 
+  </p><p class="player continued-line p_c_gmdesc"><b>⦿</b>
+    스스로가 좀 멍청해진 기분이 드는 와중에 이치노세가 입을 엽니다. 
+  </p><p class="player p_c2"><b>이치노세 아키노리</b>
+    ...이제 몇 번째더라.  
+  </p><p class="player continued-line p_c2"><b>이치노세 아키노리</b>
+    윤회가 싫다고 했더니 벌을 받는 기분이야. 
+  </p><p class="player continued-line p_c2"><b>이치노세 아키노리</b>
+    너도 알고 있었지? 아리야마. 
+  </p><p class="player p_c1"><b>아리야마 슈리</b>
+    ... ... (웬일로 얌전히 고개 끄덕이는가 싶더니...) 
+  </p><p class="player continued-line p_c1"><b>아리야마 슈리</b>
+    (테이프 다시 아키노리의 입에 붙여주었다.) 
+  </p><p class="player continued-line p_c1"><b>아리야마 슈리</b>
+    악마의 힘일까? 
+  </p><p class="player p_c2"><b>이치노세 아키노리</b>
+    (인상을 구기며 제 손으로 다시 뜯어냈다.) 가능성은 있지. 
+  </p><p class="player continued-line p_c2"><b>이치노세 아키노리</b>
+    (그리곤 잠시 말이 없다가 아리야마의 입에 그것을 붙였다.) ...이상하지. 아무리 생각해도 테러범 얼굴이 기억이 안 나. 
+  </p><p class="player p_c1"><b>아리야마 슈리</b>
+    흐브흐그흐 
+  </p><p class="player p_c2"><b>이치노세 아키노리</b>
+    (무시한다.) 잡혀 온 경위도, 테러리스트가 요구하는 조건이라는 것도, 직전에 우리가 뭘 하고 있었는지도. 
+  </p><p class="player p_c1"><b>아리야마 슈리</b>
+    (똑같이 인상 구기며 떼어낸다.) ...나는 내가 노망이 온 줄 알았는데 말이지. 정말 다행이다. 아니라서. 
+  </p><p class="player p_c2"><b>이치노세 아키노리</b>
+    (네 말은 무시하고 혼자 곰곰히 생각하더니.) 
+  </p><p class="player continued-line p_c2"><b>이치노세 아키노리</b>
+    익숙하네... 
+  </p><p class="player p_c1"><b>아리야마 슈리</b>
+    헛소리 그만할까? 
+  </p><p class="player p_c2"><b>이치노세 아키노리</b>
+    마음대로. 
+  </p><p class="player continued-line p_c2"><b>이치노세 아키노리</b>
+    그나저나 나는 이게 익숙하거든. 
+  </p><p class="player continued-line p_c2"><b>이치노세 아키노리</b>
+    너는 아니겠지만... 그러니까, 기억의 공백이라는 거... 
+  </p><p class="player continued-line p_c2"><b>이치노세 아키노리</b>
+    (다시 너를 바라본다.) 너도 알겠지? 
+  </p><p class="player p_c1"><b>아리야마 슈리</b>
+    아아... 확실히. 
+  </p><p class="player continued-line p_c1"><b>아리야마 슈리</b>
+    한 한달만 더 겪어보면 널 완전히 이해하게 될 지도 모르겠다. 
+  </p><p class="player continued-line p_c1"><b>아리야마 슈리</b>
+    폭탄 뚜껑 열어. 
+  </p><p class="player p_c2"><b>이치노세 아키노리</b>
+    (한숨 쉬며 익숙하게 폭발물을 열었다.) 
+  </p><p class="player p_c1"><b>아리야마 슈리</b>
+    관성이란 무섭지... 점점 부정적인 감정은 잊고 앞으로 어떻게 해야 좋을 지만 생각하게 되잖아. (그 다음은 알지? 라고 말하는 듯한 표정으로 고개 까딱였다.) 
+  </p><p class="player continued-line p_c1"><b>아리야마 슈리</b>
+    나는 이게 되는데 너는 왜 안되는걸까? 
+  </p><p class="player p_c2"><b>이치노세 아키노리</b>
+    불가항력이라는 말이 있지. (커터칼을 가져간다. 장갑의 가죽이 네 손에 스친다.) 
+  </p><p class="player continued-line p_c2"><b>이치노세 아키노리</b>
+    윤회라는 거대한 흐름은 고작해야 관성이라는 개인의 움직임 따위에 영향받지 못하니까. 
+  </p><p class="player continued-line p_c2"><b>이치노세 아키노리</b>
+    (그리고 파란 선을 잘랐다.) 
+  </p><p class="player continued-line p_c2"><b>이치노세 아키노리</b>
+    ...여덟 번째가 되면. 
+  </p><p class="player continued-line p_c2"><b>이치노세 아키노리</b>
+    빨간 선을 자를 거야. 
+  </p><p class="player continued-line p_c2"><b>이치노세 아키노리</b>
+    (지친 얼굴이다.) 
+  </p><p class="player p_c1"><b>아리야마 슈리</b>
+    도돌이표처럼 살면 안되는건가? 나는 그것도 삶의 방식이라고 보는데. 
+  </p><p class="player continued-line p_c1"><b>아리야마 슈리</b>
+    솔직히 (...) 이 상황도 그리 나쁘지만은 않아. 빠져나갈 구실이 없잖아. 
+  </p><p class="player continued-line p_c1"><b>아리야마 슈리</b>
+    여덟 번째에는 내가 자를래. 
+  </p><p class="player p_c2"><b>이치노세 아키노리</b>
+    ... (한참을 고민하더니 말없이 끄덕였다.) 
+  </p><p class="player p_c_gmdesc"><b>⦿</b>
+    이후에는 늘 보던 체어샷. 
+  </p><p class="player continued-line p_c_gmdesc"><b>⦿</b>
+    이번의 몸짓은 좀 지쳐 있고 또 노련하네요. 
+  </p><p class="player continued-line p_c_gmdesc"><b>⦿</b>
+    하기야 이렇게 머리를 후리는 것만 7번째입니다. 
+  </p><p class="player continued-line p_c_gmdesc"><b>⦿</b>
+    경찰에게 손을 흔들어 안으로 오라고 신호한 이치노세는... 
+  </p><p class="player continued-line p_c_gmdesc"><b>⦿</b>
+    몸을 푹 숙였다가, 이내 고개를 치켜듭니다. 
+  </p><p class="player continued-line p_c_gmdesc"><b>⦿</b>
+    얼굴에 붙은 것은 약간 돌아버린 것 같은 눈동자. 
+  </p><p class="player continued-line p_c_gmdesc"><b>⦿</b>
+    ...아니. 늘 그랬던 것 같기도 합니다. 
+  </p><p class="player continued-line p_c_gmdesc"><b>⦿</b>
+    그가 했던 말은 결국 이렇습니다. 
+  </p><p class="player continued-line p_c_gmdesc"><b>⦿</b>
+    '여덟 번째가 온다면 죽어버리겠다.' 
+  </p><p class="player continued-line p_c_gmdesc"><b>⦿</b>
+    그러니 아마도, 우리는 지금부터 이 영속되는 시간의 흐름에서 빠져나가기 위해서 고군분투해야 합니다. 
+  </p><p class="player continued-line p_c_gmdesc"><b>⦿</b>
+    그걸 위해서는…글쎄. 
+  </p><p class="player continued-line p_c_gmdesc"><b>⦿</b>
+    모르긴 몰라도, 일단 지금까지와 완전히 똑같이 행동하는 건 아무래도 좋은 루트가 아니겠죠. 
+  </p><p class="player continued-line p_c_gmdesc"><b>⦿</b>
+    그런 생각을 하던 와중. 
+  </p><p class="player continued-line p_c_gmdesc"><b>⦿</b>
+    경찰관 한 명이 그러지 말라는 듯 말을 걸어옵니다. 
+  </p><p class="player p_c3"><b>경찰관</b>
+    괜찮으십니까? 테러범들은 모두 체포되었습니다. 
+  </p><p class="player continued-line p_c3"><b>경찰관</b>
+    바로 근처 병원으로 이송해드리도록 하겠습니다. 
+  </p><p class="player p_c_gmdesc"><b>⦿</b>
+    ⋯ 
+  </p><p class="player continued-line p_c_gmdesc"><b>⦿</b>
+    그래, 이건 좋은 루트가 아니라고요. 
+  </p><p class="player continued-line p_c_gmdesc"><b>⦿</b>
+    어떻게 할까요, 아리야마? 
+  </p><p class="player p_c1"><b>아리야마 슈리</b>
+    아뇨, 저희가 알아서 가겠습니다.  
+  </p><p class="player continued-line p_c1"><b>아리야마 슈리</b>
+    수고하십쇼. (고개 대충 꾸벅하고는 그대로 아키노리의 뒷목을 잡아 끌었다.) 
+  </p><p class="player p_c2"><b>이치노세 아키노리</b>
+    (잠깐 당황한 눈빛이 스치지만, 이내 의중을 깨닫고는 신경질적으로 네 손만 떼어냈다.) 
+  </p><p class="player continued-line p_c2"><b>이치노세 아키노리</b>
+    (그리곤 공안 신분증을 꺼내 보였다.) 네, 공안에서 나왔습니다. 복귀해야 해서요. 
+  </p><p class="player continued-line p_c2"><b>이치노세 아키노리</b>
+    수고하세요. 
+  </p><p class="player p_c_gmdesc"><b>⦿</b>
+    경찰관은 신분증을 확인하고는 가볍게 경례합니다. 
+  </p><p class="player p_c3"><b>경찰관</b>
+    아, 그러셨군요. 그럼 저희는 현장을 마저 정리하겠습니다. 
+  </p><p class="player continued-line p_c3"><b>경찰관</b>
+    먼저 들어가십쇼. 
+  </p><p class="player p_c_gmdesc"><b>⦿</b>
+    당신들은 그렇게 지긋지긋한 빌딩을 떠납니다. 
+  </p><p class="player continued-line p_c_gmdesc"><b>⦿</b>
+      
+  </p><p class="player chapter-title continued-line p_c_gmdesc"><b>⦿</b>
+            「CHAPTER. 번뇌와 불신뢰」 
+  </p><p class="player continued-line p_c_gmdesc"><b>⦿</b>
+      
+  </p><p class="player continued-line p_c_gmdesc"><b>⦿</b>
+    두 사람은 병원과 경찰, 테러범과 정신적 상해, 그리고 이외의 여러 가지를 뒤로 한 채 집으로 향합니다. 
+  </p><p class="player continued-line p_c_gmdesc"><b>⦿</b>
+    그러던 중 어쩐지 눈에 익은 장소가 눈에 띕니다. 
+  </p><p class="player continued-line p_c_gmdesc"><b>⦿</b>
+    [ 아리야마 슈리, 이성 판정 ] 
+  </p><p class="player p_c1"><b>아리야마 슈리</b><span class="dice-line">
+    cc&lt;=90 이성 (1D100&lt;=90) ＞ 35 ＞ Success
+  </span></p><p class="player p_c_gmdesc"><b>⦿</b>
+    무언가 떠오를 것 같습니다. 
+  </p><p class="player continued-line p_c_gmdesc"><b>⦿</b>
+    그리고 이치노세가 멈추어 섭니다. 
+  </p><p class="player continued-line p_c_gmdesc"><b>⦿</b>
+    그 가로등 아래입니다. 
+  </p><p class="player p_c2"><b>이치노세 아키노리</b>
+    너도 기억이 났지? 
+  </p><p class="player continued-line p_c2"><b>이치노세 아키노리</b>
+    가로등 앞에서 만났잖아. 모처럼의 휴일이었고. 
+  </p><p class="player continued-line p_c2"><b>이치노세 아키노리</b>
+    비가 조금 오려고 했었나. 
+  </p><p class="player p_c1"><b>아리야마 슈리</b>
+    기억 안 나는데. (거짓말이다.) 
+  </p><p class="player p_c_gmdesc"><b>⦿</b>
+    당신은 이치노세가 하는 말이 무엇인지 알고 있습니다. 
+  </p><p class="player continued-line p_c_gmdesc"><b>⦿</b>
+    비 몇 방울이 떨어지고 있었습니다. 
+  </p><p class="player continued-line p_c_gmdesc"><b>⦿</b>
+    앞으로 하얀색 차 하나가 지나갔는데, 아직까지는 도로에 빗물이 고이지 않았으므로 튀기는 물방울은 없었습니다. 
+  </p><p class="player continued-line p_c_gmdesc"><b>⦿</b>
+    당신은 분명, 가라앉은 공기를 느꼈습니다. 
+  </p><p class="player continued-line p_c_gmdesc"><b>⦿</b>
+    대기 중에 떠도는 습기 때문이 아닙니다.  
+  </p><p class="player continued-line p_c_gmdesc"><b>⦿</b>
+    사람과 사람 사이의 공기가 가진 음울한 양상. 
+  </p><p class="player continued-line p_c_gmdesc"><b>⦿</b>
+    그건 인간이라면 누구나 느낄 수 있는 겁니다. 
+  </p><p class="player continued-line p_c_gmdesc"><b>⦿</b>
+    그건 인간이 아니라도, 누구나 느낄 수 있는 거고요. 
+  </p><p class="player continued-line p_c_gmdesc"><b>⦿</b>
+    상대방의 표정과 몸짓이 좋지 않은 예감을 전하니까요. 
+  </p><p class="player continued-line p_c_gmdesc"><b>⦿</b>
+    기억 속의 이치노세가 말합니다. 
+  </p><p class="player continued-line p_c_gmdesc"><b>⦿</b>
+    「영화 표는 내가 예매해 뒀어.」 
+  </p><p class="player continued-line p_c_gmdesc"><b>⦿</b>
+    「그나저나, 우산은 챙겼어? 비 예보가 있던데.」 
+  </p><p class="player continued-line p_c_gmdesc"><b>⦿</b>
+    「⋯.」 
+  </p><p class="player continued-line p_c_gmdesc"><b>⦿</b>
+    「⋯⋯.」 
+  </p><p class="player continued-line p_c_gmdesc"><b>⦿</b>
+    「어제 그렇게 헤어진 게 마음에 걸려서 그래?」 
+  </p><p class="player continued-line p_c_gmdesc"><b>⦿</b>
+    「그냥 잊어도 되는데.」 
+  </p><p class="player continued-line p_c_gmdesc"><b>⦿</b>
+    「고작해야, 나잖아.」 
+  </p><p class="player continued-line p_c_gmdesc"><b>⦿</b>
+    「⋯⋯.」 
+  </p><p class="player continued-line p_c_gmdesc"><b>⦿</b>
+    「정 그러면, 내가 사과할게.」 
+  </p><p class="player continued-line p_c_gmdesc"><b>⦿</b>
+    「미안해.」 
+  </p><p class="player continued-line p_c_gmdesc"><b>⦿</b>
+    「이제 좀 나아졌어?」 
+  </p><p class="player continued-line p_c_gmdesc"><b>⦿</b>
+    ⋯⋯. 
+  </p><p class="player continued-line p_c_gmdesc"><b>⦿</b>
+    그건 명백히 거짓된 사과였습니다. 
+  </p><p class="player continued-line p_c_gmdesc"><b>⦿</b>
+    당신을 달래기 위한 것 그 이상도 이하도 아니었죠. 
+  </p><p class="player continued-line p_c_gmdesc"><b>⦿</b>
+    그리고 다시 현실입니다. 
+  </p><p class="player continued-line p_c_gmdesc"><b>⦿</b>
+    당신이 한참 말이 없자, 이치노세는 다시 걸음을 옮깁니다. 
+  </p><p class="player continued-line p_c_gmdesc"><b>⦿</b>
+    당신은 그를 겨우 뒤따라 걸었을 뿐이고... 
+  </p><p class="player continued-line p_c_gmdesc"><b>⦿</b>
+    그리고 당신들은 어느새 어느 극장 안입니다. 
+  </p><p class="player continued-line p_c_gmdesc"><b>⦿</b>
+    시커먼 어둠 속에서 스크린의 빛만이 두 사람을 비추는 영화관 안. 
+  </p><p class="player continued-line p_c_gmdesc"><b>⦿</b>
+    상영 중인 영화는 '티파니에서 아침을'. 
+  </p><p class="player continued-line p_c_gmdesc"><b>⦿</b>
+    언젠가 당신이 지나가듯 말한 영화를, 그는 놓치지 않았습니다. 
+  </p><p class="player continued-line p_c_gmdesc"><b>⦿</b>
+    그러나 이치노세는 당신이 있는 쪽을 보지 않고, 앞으로만 시선을 둡니다. 
+  </p><p class="player continued-line p_c_gmdesc"><b>⦿</b>
+    울지도 웃지도 않는 표정이 화면이 발하는 빛에 비추어 보입니다. 
+  </p><p class="player continued-line p_c_gmdesc"><b>⦿</b>
+    필시 영화의 내용보다는 다른 곳에 신경이 쏠려 있겠군요. 
+  </p><p class="player continued-line p_c_gmdesc"><b>⦿</b>
+    뒷자리의 사람들이 영화의 감상을 소리 낮춰 떠들어대는 동안, 당신들은 한 마디도 섞지 않았습니다. 
+  </p><p class="player continued-line p_c_gmdesc"><b>⦿</b>
+    ⋯. 
+  </p><p class="player continued-line p_c_gmdesc"><b>⦿</b>
+    ⋯⋯. 
+  </p><p class="player continued-line p_c_gmdesc"><b>⦿</b>
+    기억은 빠르게 흘러갑니다. 
+  </p><p class="player continued-line p_c_gmdesc"><b>⦿</b>
+    [ 아리야마 슈리, 이성 판정 ] 
+  </p><p class="player p_c1"><b>아리야마 슈리</b><span class="dice-line">
+    cc&lt;=90 이성 (1D100&lt;=90) ＞ 22 ＞ Success
+  </span></p><p class="player p_c_gmdesc"><b>⦿</b>
+    조금씩 내리던 비는 이제는 소나기가 되었고. 
+  </p><p class="player continued-line p_c_gmdesc"><b>⦿</b>
+    당신들은 당신의 집 앞에서 우산을 든 채 잠시 멈췄습니다. 
+  </p><p class="player continued-line p_c_gmdesc"><b>⦿</b>
+    아마 내일 다시 공안에서 만나게 될 텐데. 
+  </p><p class="player continued-line p_c_gmdesc"><b>⦿</b>
+    내일 봐. 그런 인사만 빠르게 뱉으면 그만이었는데... 
+  </p><p class="player continued-line p_c_gmdesc"><b>⦿</b>
+    왜 발이 멈췄던 걸까. 
+  </p><p class="player continued-line p_c_gmdesc"><b>⦿</b>
+    「⋯⋯.」 
+  </p><p class="player continued-line p_c_gmdesc"><b>⦿</b>
+    그러던 중 이치노세가 입을 뗍니다. 
+  </p><p class="player continued-line p_c_gmdesc"><b>⦿</b>
+    「영화 끝나고 바로 말하려고 했는데, 말하기가 어려워서 늦어졌네.」 
+  </p><p class="player continued-line p_c_gmdesc"><b>⦿</b>
+    「뭐라고 말을 해야 할까...」 
+  </p><p class="player continued-line p_c_gmdesc"><b>⦿</b>
+    「우리가 지금 어떤 식으로든 정의된 관계에 놓여 있지는 않지만...」 
+  </p><p class="player continued-line p_c_gmdesc"><b>⦿</b>
+    「이게 무엇이든 간에... 그만두는게 좋을 것 같아, 아리야마.」 
+  </p><p class="player continued-line p_c_gmdesc"><b>⦿</b>
+    「서로에게 좋지 않은 것 같아.」 
+  </p><p class="player continued-line p_c_gmdesc"><b>⦿</b>
+    「⋯⋯.」 
+  </p><p class="player continued-line p_c_gmdesc"><b>⦿</b>
+    「나는 앞으로도 언제나 네 무운을 빌겠지만」 
+  </p><p class="player continued-line p_c_gmdesc"><b>⦿</b>
+    「네가 무엇을 하든 관여하는 일 없을 거고.」 
+  </p><p class="player continued-line p_c_gmdesc"><b>⦿</b>
+    「너 또한 내가 무엇을 하든, 관여하지 않았으면 좋겠다.」 
+  </p><p class="player continued-line p_c_gmdesc"><b>⦿</b>
+    「이해하지?」 
+  </p><p class="player continued-line p_c_gmdesc"><b>⦿</b>
+    그리고 그는 왼손의 장갑을 벗었습니다. 
+  </p><p class="player continued-line p_c_gmdesc"><b>⦿</b>
+    검지에 익숙한 반지가 자리하고 있는 것이 보였고. 
+  </p><p class="player continued-line p_c_gmdesc"><b>⦿</b>
+    이치노세는 그것을 망설임 없이 빼내었습니다. 
+  </p><p class="player continued-line p_c_gmdesc"><b>⦿</b>
+    그리고 당신의 손에 직접 쥐여 줍니다. 
+  </p><p class="player continued-line p_c_gmdesc"><b>⦿</b>
+    온기 어린 왼손과 차가운 반지가 당신의 손에 닿아 옵니다. 
+  </p><p class="player p_c1"><b>아리야마 슈리</b>
+    (사람이 무언가에 이입하려면 그것에 공감할 수 있어야 한다. 필름 속 주인공들은 각자의 삶의 일부분을 내어주며 균형을 맞추어간다. 아마도 그 장면들이 눈에 들어오기 시작한 건, '나 자신이 생각보다 외로움을 잘 탄다'고 자각했을 즈음부터. 스무 살의 일이다.) 
+  </p><p class="player continued-line p_c1"><b>아리야마 슈리</b>
+    (결핍은 그대로 방치해두면 계속 몸집을 불려 나중엔 자신조차 어찌할 수 없는 크기가 되어버리기 마련이다. 여태껏 걸어온 발걸음은 어떻게든 섞여서 살아보려 노력한 흔적이다. -근데 현수막 진짜 누가 걸었냐 씨발- 하지만 그렇다고 당당하게 꺼내볼 수 있는 것은 아니니까... 대충 어느 구석에 처박아뒀을 뿐인데... ...) 
+  </p><p class="player continued-line p_c1"><b>아리야마 슈리</b>
+    ...계속 옆에 있어주면 안돼? 
+  </p><p class="player continued-line p_c1"><b>아리야마 슈리</b>
+    너한텐 계속 같은 말만 하게, 되는 것 같은데... 내가 바라는 건 늘 똑같았으니까. 굳이 말을 안해서 그렇지... 
+  </p><p class="player p_c2"><b>이치노세 아키노리</b>
+    (윤회는 아주 작은 생명에서 시작한다. 벌레는 개구리가, 개구리는 새가. 새는 짐승이, 짐승은 결국 인간이 된다. 때문에 그렇게 지성체로 거듭난 이들은 필히 타자에 이입해 공감하게 된다. 벌레에, 개구리에, 새에, 짐승에. 그리고 인간에. 거부할 수 없었고, 그는 세상 만물에 공명했다. 이치노세에게 공감은 일종의 윤회였다—라고, 깨달은 것은 스무 살의 일이다.) 
+  </p><p class="player continued-line p_c2"><b>이치노세 아키노리</b>
+    (과잉은 그대로 방치한다면 계속 몸집을 불려 나중엔 자신조차 어찌할 수 없는 크기가 되어버리기 마련이다. 변호사가 되었던 것은 한 사람의 대변인이라는 직책을 통해 이를 어떻게든 분출해 보려는 시도의 흔적이다. 하지만 자본주의 사회의 '직업'이란 것이 말처럼 그리 낭만적이지는 못했기에. 온갖 세상군상 더러운 일들을 전부 목격한 후에도 작은 죄책감을 마음 한구석 밀어둘 만큼 자신이 강인하지 못했던 것이 이치노세의 죄였다.) 
+  </p><p class="player continued-line p_c2"><b>이치노세 아키노리</b>
+    (그러니까 이것은 결국 그때 그 도로에 뛰어들기까지의 주마등이고 회상이었다. 도로의 희고 검은 점선을 과녁 삼아 몸을 던지려던 그때로 돌아간 기분이라서. 그리고 그 때도 지금도 누군가 또는 무언가의 개입으로 단번에 목적을 이루지는 못했다.) 
+  </p><p class="player continued-line p_c2"><b>이치노세 아키노리</b>
+    (다만 한가지 차이가 있다면...) 
+  </p><p class="player continued-line p_c2"><b>이치노세 아키노리</b>
+    (너와는 달리, 그 악마는 제 인생의 마침표를 지우고 물음표를 심었었다.)  
+  </p><p class="player continued-line p_c2"><b>이치노세 아키노리</b>
+    (너와는 달리...) 
+  </p><p class="player continued-line p_c2"><b>이치노세 아키노리</b>
+    (왜냐하면, 한때 나는 네가 나의 마침표가 되리라 믿었었기 때문이다.) 
+  </p><p class="player continued-line p_c2"><b>이치노세 아키노리</b>
+    ...바보 같네. (중얼거렸다.) 
+  </p><p class="player continued-line p_c2"><b>이치노세 아키노리</b>
+    난... (고개 들어 너를 본다.) 전부 그만두고 싶어... 
+  </p><p class="player continued-line p_c2"><b>이치노세 아키노리</b>
+    계속 같은 말만 듣는 것도 이젠 질려. 
+  </p><p class="player continued-line p_c2"><b>이치노세 아키노리</b>
+    뭘 걱정하는지 모르겠지만, 너는 분명 나 없이도 괜찮을 거야. 
+  </p><p class="player continued-line p_c2"><b>이치노세 아키노리</b>
+    (잡은 손에 힘을 주었다 놓는다.) ...장담해. 
+  </p><p class="player p_c1"><b>아리야마 슈리</b>
+    이, ...아키노리. 사람은 생각보다 그리 강인한 존재가 아니야. 너도 잘 알잖아. 
+  </p><p class="player continued-line p_c1"><b>아리야마 슈리</b>
+    조금 더 풍족하게 살고 싶어 하는 게 뭐가 나빠? 
+  </p><p class="player continued-line p_c1"><b>아리야마 슈리</b>
+    왜인지는 몰라, 그냥 나는... 네가 어떤 방식으로든 있어야 할 것 같아. (이제와서 네 탓으로 돌리지도 못한다.) 이치노세 아키노리, 네가.  
+  </p><p class="player continued-line p_c1"><b>아리야마 슈리</b>
+    그냥 처음부터 끝까지 내 욕심이었어. 미안해. 네 마음 고려 안하고 멋대로 굴어서. (이건 명백히 진실된 사과였다.) 
+  </p><p class="player p_c2"><b>이치노세 아키노리</b>
+    ...나는, 아리야마 슈리 네가. (괴로운 얼굴로 시선을 피했다.) 
+  </p><p class="player continued-line p_c2"><b>이치노세 아키노리</b>
+    버거워. (그리고 토해냈다.)  
+  </p><p class="player continued-line p_c2"><b>이치노세 아키노리</b>
+    너를 알지 않았다면 좋았을 텐데. 
+  </p><p class="player continued-line p_c2"><b>이치노세 아키노리</b>
+    더는 무언가에... 누군가에 마음을... (결국 손을 들어 얼굴을 덮었다. 말을 잇지 못한다.) 
+  </p><p class="player p_c_gmdesc"><b>⦿</b>
+    뱉지 않았으면 좋았을 말들이 한참 오가던 그 때입니다. 
+  </p><p class="player continued-line p_c_gmdesc"><b>⦿</b>
+    이치노세의 뒤쪽으로부터 무언가 보입니다. 
+  </p><p class="player continued-line p_c_gmdesc"><b>⦿</b>
+    거대하고 꿈틀거리는... 
+  </p><p class="player continued-line p_c_gmdesc"><b>⦿</b>
+    벌레? 
+  </p><p class="player continued-line p_c_gmdesc"><b>⦿</b>
+    하지만 바퀴벌레도 사마귀도 아닙니다. 
+  </p><p class="player continued-line p_c_gmdesc"><b>⦿</b>
+    저렇게 생긴 벌레는 어디서도 본 적 없습니다. 
+  </p><p class="player continued-line p_c_gmdesc"><b>⦿</b>
+    ...사실 벌레라기보다는 갑각류와 촉수가 합쳐져 태어난 새로운 진화의 결과물 같기도 합니다. 
+  </p><p class="player continued-line p_c_gmdesc"><b>⦿</b>
+    그것을 유심히 보고 있으면, 벌레가 목을 옆으로 뒤틉니다. 
+  </p><p class="player continued-line p_c_gmdesc"><b>⦿</b>
+    곧이어… 
+  </p><p class="player continued-line p_c_gmdesc"><b>⦿</b>
+    이쪽을 향해 고속으로 다가옵니다! 
+  </p><p class="player continued-line p_c_gmdesc"><b>⦿</b>
+    도망칠 새도 없이! 
+  </p><p class="player continued-line p_c_gmdesc"><b>⦿</b>
+    당신의 시선이 향하는 방향을 느낀 이치노세 또한 뒤를 돌아보고, 기억은 거기서 끊깁니다. 
+  </p><p class="player continued-line p_c_gmdesc"><b>⦿</b>
+    ⋯. 
+  </p><p class="player continued-line p_c_gmdesc"><b>⦿</b>
+    ⋯⋯. 
+  </p><p class="player continued-line p_c_gmdesc"><b>⦿</b>
+    돌아온 기억들을 바탕으로 할 때 추론할 수 있는 것은 두 가지입니다. 
+  </p><p class="player continued-line p_c_gmdesc"><b>⦿</b>
+    첫째. 
+  </p><p class="player continued-line p_c_gmdesc"><b>⦿</b>
+    이 상황들은 그 개같은 벌레와 관련된 것이 분명하다. 
+  </p><p class="player continued-line p_c_gmdesc"><b>⦿</b>
+    둘째. 
+  </p><p class="player continued-line p_c_gmdesc"><b>⦿</b>
+    이치노세는 이제 내가 필요없는 모양이다. 
+  </p><p class="player p_c1"><b>아리야마 슈리</b>
+    이치노세. 
+  </p><p class="player continued-line p_c1"><b>아리야마 슈리</b>
+    ...좋은 영화는 왜 시간이 지나도 여전히 재미있을까? 
+  </p><p class="player continued-line p_c1"><b>아리야마 슈리</b>
+    그때의 몰입감은 여전한 것 같아. 
+  </p><p class="player p_c2"><b>이치노세 아키노리</b>
+    ... ... 
+  </p><p class="player continued-line p_c2"><b>이치노세 아키노리</b>
+    나는 영화를 좋아하지 않아. 
+  </p><p class="player continued-line p_c2"><b>이치노세 아키노리</b>
+    간접경험도 일종의 윤회거든. 
+  </p><p class="player p_c_gmdesc"><b>⦿</b>
+    '충분한 답이 되었을까.' 
+  </p><p class="player continued-line p_c_gmdesc"><b>⦿</b>
+    그는 그런 눈으로 당신을 바라봅니다. 
+  </p><p class="player p_c1"><b>아리야마 슈리</b>
+    그럼 차라리 그때 다른 걸 하러 갈 걸 그랬어. 뭐든 네가 좋아할만한 걸로. 
+  </p><p class="player p_c2"><b>이치노세 아키노리</b>
+    난 괜찮았어. 
+  </p><p class="player continued-line p_c2"><b>이치노세 아키노리</b>
+    네가 있었잖아. 
+  </p><p class="player continued-line p_c2"><b>이치노세 아키노리</b>
+    ...그렇지? 
+  </p><p class="player p_c1"><b>아리야마 슈리</b>
+    그러면 왜 더 같이 있고 싶다고 생각하지 않아? (...그러다 그만두었다. 이것도 다 부질없는 짓이겠지 싶어서.) 
+  </p><p class="player continued-line p_c1"><b>아리야마 슈리</b>
+    이제 어떻게 해야할까? (주어는 붙이지 않는다.) 
+  </p><p class="player p_c_gmdesc"><b>⦿</b>
+    그러던 와중입니다. 
+  </p><p class="player continued-line p_c_gmdesc"><b>⦿</b>
+    당신들은 문득, 주변 풍경이 이상해졌음을 깨닫게 됩니다. 
+  </p><p class="player continued-line p_c_gmdesc"><b>⦿</b>
+    주위 건물의 표면이 꿈틀거리고 있습니다. 
+  </p><p class="player continued-line p_c_gmdesc"><b>⦿</b>
+    자세히 볼 필요도 없이, 수백 수천의 조그만 벌레들이 벽에 붙어 꿈틀거리고 있다는 것을 파악할 수 있습니다. 
+  </p><p class="player continued-line p_c_gmdesc"><b>⦿</b>
+    사각거리는 소리가 귀 안쪽을 침범합니다. 
+  </p><p class="player continued-line p_c_gmdesc"><b>⦿</b>
+    알 수도 없는 곳에서 나이 많은 남자 하나가 우는 소리가 들려옵니다. 
+  </p><p class="player continued-line p_c_gmdesc"><b>⦿</b>
+    벽에 붙어 있던 벌레 중 몇 마리가 꿀럭대더니 알주머니를 만듭니다. 
+  </p><p class="player continued-line p_c_gmdesc"><b>⦿</b>
+    이어서 당신들이 지나 온 길을 따라, 행인 다섯 명이 이쪽을 향해 다가오기 시작합니다. 
+  </p><p class="player continued-line p_c_gmdesc"><b>⦿</b>
+    행인 중 하나는 머리가 없고, 나머지 네 명은 머리는 있지만 얼굴이 없습니다. 
+  </p><p class="player continued-line p_c_gmdesc"><b>⦿</b>
+    눈과 귀와 코와 입이 있어야 할 자리에 일곱 개의 구멍이 뚫려 있을 뿐입니다. 
+  </p><p class="player continued-line p_c_gmdesc"><b>⦿</b>
+    행인들의 눈높이는 점점 낮아집니다. 
+  </p><p class="player continued-line p_c_gmdesc"><b>⦿</b>
+    그들이 몸을 차츰 굽히고 있기 때문입니다. 
+  </p><p class="player continued-line p_c_gmdesc"><b>⦿</b>
+    ⋯⋯. 
+  </p><p class="player continued-line p_c_gmdesc"><b>⦿</b>
+    어느 순간부터 그들은 네 발로 걷기 시작합니다. 
+  </p><p class="player continued-line p_c_gmdesc"><b>⦿</b>
+    원래부터 짐승이어서 두 발로 걷는 방법을 안 적이 없었다는 것처럼.  
+  </p><p class="player continued-line p_c_gmdesc"><b>⦿</b>
+    머리 없는 사람이 네 발로 빠르게 뛰어 당신들을 향해 달려오면, 나머지 사람들도 그를 따라 빠르게 이쪽을 향합니다. 
+  </p><p class="player continued-line p_c_gmdesc"><b>⦿</b>
+    ⋯⋯. 
+  </p><p class="player continued-line p_c_gmdesc"><b>⦿</b>
+    「⋯⋯.」 
+  </p><p class="player continued-line p_c_gmdesc"><b>⦿</b>
+    「분명해지는 것이 있습니다.」 
+  </p><p class="player continued-line p_c_gmdesc"><b>⦿</b>
+    「이곳은 현실이 아닙니다.」 
+  </p><p class="player continued-line p_c_gmdesc"><b>⦿</b>
+    당신들을 향해 달려 오는 네발짐승들 위로, 기억 속에서 마주했던 거대한 벌레가 내려앉습니다. 
+  </p><p class="player continued-line p_c_gmdesc"><b>⦿</b>
+    벌레가 향하는 방향은 당연히도… 
+  </p><p class="player continued-line p_c_gmdesc"><b>⦿</b>
+    「⋯⋯.」 
+  </p><p class="player continued-line p_c_gmdesc"><b>⦿</b>
+    본능이 몸의 마지막 세포 하나까지 곤두세웁니다. 
+  </p><p class="player continued-line p_c_gmdesc"><b>⦿</b>
+    도망가야 한다고⋯⋯! 
+  </p><p class="player continued-line p_c_gmdesc"><b>⦿</b>
+      
+  </p><p class="player chapter-title continued-line p_c_gmdesc"><b>⦿</b>
+              「CHAPTER. 런, 런, 런!」 
+  </p><p class="player continued-line p_c_gmdesc"><b>⦿</b>
+      
+  </p><p class="player continued-line p_c_gmdesc"><b>⦿</b>
+    지금 당장 이곳에서 멀어져야 한다는 생각만이 머리를 채웁니다. 
+  </p><p class="player continued-line p_c_gmdesc"><b>⦿</b>
+    잡히는 순간 끔찍한 죽음이, 또는 그에 준하는 무언가가 예정되어 있다는 건 안 봐도 알 수 있습니다. 
+  </p><p class="player continued-line p_c_gmdesc"><b>⦿</b>
+    하지만 달리기가 빠르다고 공격에서도 자유로울 수 있는 건 아니죠. 
+  </p><p class="player continued-line p_c_gmdesc"><b>⦿</b>
+    [ 전원, 민첩 판정 ] 
+  </p><p class="player p_c1"><b>아리야마 슈리</b><span class="dice-line">
+    cc&lt;=90 민첩 (1D100&lt;=90) ＞ 21 ＞ Success
+  </span></p><p class="player p_c2"><b>이치노세 아키노리</b><span class="dice-line">
+    cc&lt;=80 민첩 (1D100&lt;=80) ＞ 68 ＞ Success
+  </span></p><p class="player p_c_gmdesc"><b>⦿</b>
+    그것들이 쏘아낸 액체를 아슬아슬하게 피해냅니다. 
+  </p><p class="player continued-line p_c_gmdesc"><b>⦿</b>
+    그러나 추격자들은 두 사람을 놓아줄 생각이 없는 것 같습니다. 
+  </p><p class="player continued-line p_c_gmdesc"><b>⦿</b>
+    저것들이 하는 ‘생각’이라는 것이 인간의 사고방식에 가까운 것일지는 고민을 해 봐야 하겠지만... 
+  </p><p class="player continued-line p_c_gmdesc"><b>⦿</b>
+    아무튼 다시. 
+  </p><p class="player continued-line p_c_gmdesc"><b>⦿</b>
+    [ 전원, 민첩 판정 ] 
+  </p><p class="player p_c2"><b>이치노세 아키노리</b><span class="dice-line">
+    cc&lt;=80 민첩 (1D100&lt;=80) ＞ 83 ＞ Failure
+  </span></p><p class="player p_c1"><b>아리야마 슈리</b><span class="dice-line">
+    cc&lt;=90 민첩 (1D100&lt;=90) ＞ 74 ＞ Success
+  </span></p><p class="player p_c_gmdesc"><b>⦿</b>
+    네발짐승 중 하나가 지나치게 가까이 접근합니다. 
+  </p><p class="player continued-line p_c_gmdesc"><b>⦿</b>
+    아리야마는 그것을 피해냈지만... 
+  </p><p class="player continued-line p_c_gmdesc"><b>⦿</b>
+    이치노세는 뒷목이 물어뜯기는 것을 느낄 수 있습니다.  
+  </p><p class="player continued-line p_c_gmdesc"><b>⦿</b>
+    인간의 이빨에 살이 찢어지는 것 정도는 익숙하다곤 하지만... 
+  </p><p class="player continued-line p_c_gmdesc"><b>⦿</b>
+    상처는 좀 쓰라립니다. 
+  </p><p class="player p_system"><b>system</b>
+    [ 이치노세 아키노리 ] HP : 6 → 4 
+  </p><p class="player p_c1"><b>아리야마 슈리</b>
+    야... 야! 
+  </p><p class="player p_c_gmdesc"><b>⦿</b>
+    그를 살필 시간이 없습니다. 
+  </p><p class="player continued-line p_c_gmdesc"><b>⦿</b>
+    귓가에서 이빨이 부딪히는 소리, 벌레의 비행 소리. 
+  </p><p class="player continued-line p_c_gmdesc"><b>⦿</b>
+    그들이 아직도 바로 뒤에서 따라오고 있습니다! 
+  </p><p class="player continued-line p_c_gmdesc"><b>⦿</b>
+    [ 전원, 민첩 판정 ] 
+  </p><p class="player p_c2"><b>이치노세 아키노리</b><span class="dice-line">
+    cc&lt;=80 민첩 (1D100&lt;=80) ＞ 40 ＞ Success
+  </span></p><p class="player p_c1"><b>아리야마 슈리</b><span class="dice-line">
+    cc&lt;=90 민첩 (1D100&lt;=90) ＞ 18 ＞ Special
+  </span></p><p class="player p_c_gmdesc"><b>⦿</b>
+    어디선가 벽돌이 날아옵니다.  
+  </p><p class="player continued-line p_c_gmdesc"><b>⦿</b>
+    아마 뒤에 따라오는 것들이 던진 것이겠죠? 
+  </p><p class="player continued-line p_c_gmdesc"><b>⦿</b>
+    다행히도, 벽돌은 콘크리트 바닥을 강타한 뒤 산산조각이 납니다. 
+  </p><p class="player continued-line p_c_gmdesc"><b>⦿</b>
+    조각에 맞았다면 다쳤을 테지만... 두 사람은 더한 부상 없이 도주를 지속합니다. 
+  </p><p class="player continued-line p_c_gmdesc"><b>⦿</b>
+    ⋯⋯. 
+  </p><p class="player continued-line p_c_gmdesc"><b>⦿</b>
+    슬슬 다리가 꺾일 것만 같습니다. 
+  </p><p class="player continued-line p_c_gmdesc"><b>⦿</b>
+    숨이 턱까지 차오릅니다. 
+  </p><p class="player continued-line p_c_gmdesc"><b>⦿</b>
+    하지만 멈춰서 숨을 돌리다가 인생을 마감하는 것보다는 달리는 게 낫겠죠. 
+  </p><p class="player continued-line p_c_gmdesc"><b>⦿</b>
+    이 정도로 달려 본 적이 얼마만이었지… 
+  </p><p class="player continued-line p_c_gmdesc"><b>⦿</b>
+    [ 전원, 민첩 판정 ] 
+  </p><p class="player p_c1"><b>아리야마 슈리</b><span class="dice-line">
+    cc&lt;=90 민첩 (1D100&lt;=90) ＞ 18 ＞ Special
+  </span></p><p class="player p_c2"><b>이치노세 아키노리</b><span class="dice-line">
+    cc&lt;=80 민첩 (1D100&lt;=80) ＞ 53 ＞ Success
+  </span></p><p class="player p_c_gmdesc"><b>⦿</b>
+    언제 가까워졌는지, 위협적으로 옷을 찢어내는 벌레의 집게발. 
+  </p><p class="player continued-line p_c_gmdesc"><b>⦿</b>
+    하지만 살가죽에는 상처가 나지 않았으니 도주에는 문제가 없습니다.  
+  </p><p class="player continued-line p_c_gmdesc"><b>⦿</b>
+    계속해서 도망치자고요! 
+  </p><p class="player continued-line p_c_gmdesc"><b>⦿</b>
+    달리고, 달리고... 
+  </p><p class="player continued-line p_c_gmdesc"><b>⦿</b>
+    그러던 중 발목이 삐끗하는 것이 느껴집니다. 
+  </p><p class="player continued-line p_c_gmdesc"><b>⦿</b>
+    불안한 공기. 
+  </p><p class="player continued-line p_c_gmdesc"><b>⦿</b>
+    무언가 잘못될 것 같은 느낌, 그것도 아주 명확하게… 
+  </p><p class="player continued-line p_c_gmdesc"><b>⦿</b>
+    [ 전원, 민첩 판정 ] 
+  </p><p class="player p_c2"><b>이치노세 아키노리</b><span class="dice-line">
+    cc&lt;=80 민첩 (1D100&lt;=80) ＞ 26 ＞ Success
+  </span></p><p class="player p_c1"><b>아리야마 슈리</b><span class="dice-line">
+    cc&lt;=90 민첩 (1D100&lt;=90) ＞ 49 ＞ Success
+  </span></p><p class="player p_c_gmdesc"><b>⦿</b>
+    두 사람의 머리 위로 그림자가 집니다. 
+  </p><p class="player continued-line p_c_gmdesc"><b>⦿</b>
+    위를 올려다보면, 그 정체는 빌딩 공사 중 흔들거리던 철근. 
+  </p><p class="player continued-line p_c_gmdesc"><b>⦿</b>
+    커다란 벌레는 이대로는 안 되겠다고 생각한 것인지 위로 날아올라... 
+  </p><p class="player continued-line p_c_gmdesc"><b>⦿</b>
+    당신을 공격하는 대신 철근을 떨어뜨립니다.  
+  </p><p class="player continued-line p_c_gmdesc"><b>⦿</b>
+    곧장 떨어져 내리는 쇳덩이의 목적지는 당연스럽게도 두 사람이겠죠. 
+  </p><p class="player continued-line p_c_gmdesc"><b>⦿</b>
+    [ 두 사람, HP -15 ] 
+  </p><p class="player p_system"><b>system</b>
+    [ 이치노세 아키노리 ] HP : 4 → 0 
+  </p><p class="player continued-line p_system"><b>system</b>
+    [ 아리야마 슈리 ] 체력 : 14 → 0 
+  </p><p class="player p_c_gmdesc"><b>⦿</b>
+    흔들리는 시야, 무너지는 몸. 
+  </p><p class="player continued-line p_c_gmdesc"><b>⦿</b>
+    더 나아갈 수 없습니다. 
+  </p><p class="player continued-line p_c_gmdesc"><b>⦿</b>
+     당신의 몸 위로 기어오르는 손과 발.  
+  </p><p class="player continued-line p_c_gmdesc"><b>⦿</b>
+    얼굴 앞까지 다가오는 벌레의 눈. 
+  </p><p class="player continued-line p_c_gmdesc"><b>⦿</b>
+    당신은 포획당했습니다. 
+  </p><p class="player continued-line p_c_gmdesc"><b>⦿</b>
+    탈출구는 없으며, 높은 확률로 이대로 죽게 될 겁니다. 
+  </p><p class="player continued-line p_c_gmdesc"><b>⦿</b>
+    흐려지는 의식. 
+  </p><p class="player continued-line p_c_gmdesc"><b>⦿</b>
+    「⋯⋯내가 더 잘 도망쳤어야⋯.」 
+  </p><p class="player continued-line p_c_gmdesc"><b>⦿</b>
+    「⋯⋯.」 
+  </p><p class="player continued-line p_c_gmdesc"><b>⦿</b>
+    「⋯⋯미안.」 
+  </p><p class="player continued-line p_c_gmdesc"><b>⦿</b>
+    ... ...혼자 잡힌 것은 아닌 모양입니다. 
+  </p><p class="player continued-line p_c_gmdesc"><b>⦿</b>
+    의미 없는 사과도 곧 사라집니다. 
+  </p><p class="player continued-line p_c_gmdesc"><b>⦿</b>
+    무언가가 부서지는 소리에 문장이 잡아먹힙니다. 
+  </p><p class="player continued-line p_c_gmdesc"><b>⦿</b>
+    ⋯⋯. 
+  </p><p class="player continued-line p_c_gmdesc"><b>⦿</b>
+    죽음을 목전에 둔 심정은 어떻습니까. 
+  </p><p class="player continued-line p_c_gmdesc"><b>⦿</b>
+    계속 반복되는 테러를 마주하는 하루보다는 죽음이 나은 걸까요. 
+  </p><p class="player continued-line p_c_gmdesc"><b>⦿</b>
+    아니면 그 반대일까요. 
+  </p><p class="player continued-line p_c_gmdesc"><b>⦿</b>
+    가치판단은 오로지 자신의 몫입니다. 
+  </p><p class="player p_c1"><b>아리야마 슈리</b>
+    (죽음은 끝이 아니다. 사후세계를 논하는 것이 아니라, 적어도 나에게는 그렇다는 것이다. 상황은 좆됐는데 나는 좆되지 않는 삶이란, 언제나 잃은 것 없고 사지 멀쩡한 삶이란, 박수칠 때 떠나지 못하는 삶이란! 도대체 뭘 위해서... 감독이 무슨 교훈을 남기려고. 목적 없이 태어난 삶에 어떤 의미가 있는가... 몰라 그런건.) 
+  </p><p class="player continued-line p_c1"><b>아리야마 슈리</b>
+    (아이러니하게도 그런 건 죽을 때까지 알 수 없으니까. 먼저 퇴장한 그들은 알고 있겠지. 나에게 죽음이 허락되지 않는 이상 별 수 있나. 오늘도 어제같이 살 수 밖에 없는 걸. 외로운 삶이다. 이 삶의 방식에서 벗어나려 발버둥칠수록 더 깊은 수렁에 빠지는 것 같다. 지독한 윤회다.) 
+  </p><p class="player continued-line p_c1"><b>아리야마 슈리</b>
+    (사람이 무언가에 이입하려면 그것에 공감할 수 있어야 한다.) 
+  </p><p class="player continued-line p_c1"><b>아리야마 슈리</b>
+    (...아키노리.) 
+  </p><p class="player continued-line p_c1"><b>아리야마 슈리</b>
+    (나는, 네가...) 
+  </p><p class="player p_c_gmdesc"><b>⦿</b>
+    그리고 천천히.  
+  </p><p class="player continued-line p_c_gmdesc"><b>⦿</b>
+    눈이 감깁니다. 
+  </p><p class="player continued-line p_c_gmdesc"><b>⦿</b>
+    「⋯⋯.」 
+  </p><p class="player continued-line p_c_gmdesc"><b>⦿</b>
+    「⋯⋯.」 
+  </p><p class="player continued-line p_c_gmdesc"><b>⦿</b>
+      
+  </p><p class="player chapter-title continued-line p_c_gmdesc"><b>⦿</b>
+     「???. 예술은 폭발이다 그리고 인생 또한」 
+  </p><p class="player continued-line p_c_gmdesc"><b>⦿</b>
+      
+  </p><p class="player continued-line p_c_gmdesc"><b>⦿</b>
+    당연하게도, 다시 롤백. 
+  </p><p class="player continued-line p_c_gmdesc"><b>⦿</b>
+    8번째. 
+  </p><p class="player continued-line p_c_gmdesc"><b>⦿</b>
+    한낮, 오후 3시 10분. 
+  </p><p class="player continued-line p_c_gmdesc"><b>⦿</b>
+    당신은 손에 커터칼을 든 채 이치노세 앞에 서 있습니다. 
+  </p><p class="player continued-line p_c_gmdesc"><b>⦿</b>
+    무기력감이 몸을 지배하기 전에, 이성을 긁어모아야 합니다. 
+  </p><p class="player continued-line p_c_gmdesc"><b>⦿</b>
+    방금 거쳐 온 7번째 삶. 
+  </p><p class="player continued-line p_c_gmdesc"><b>⦿</b>
+    ...그렇군요. 
+  </p><p class="player continued-line p_c_gmdesc"><b>⦿</b>
+    기억을 되찾은 후 당신은 포획되었습니다. 
+  </p><p class="player continued-line p_c_gmdesc"><b>⦿</b>
+    기억이 뇌 속에 명확하게 돌아온 지금. 
+  </p><p class="player continued-line p_c_gmdesc"><b>⦿</b>
+    이 건물을 나간다고 해 봤자 같은 결말이 찾아올 것을 추론하기는 어렵지 않습니다. 
+  </p><p class="player continued-line p_c_gmdesc"><b>⦿</b>
+    그럼 간단한 추론 끝에 하나의 결론이 나옵니다. 
+  </p><p class="player continued-line p_c_gmdesc"><b>⦿</b>
+    「시간을 더 끌 이유는 없다.」 
+  </p><p class="player continued-line p_c_gmdesc"><b>⦿</b>
+    「지금, 이 순간에.」 
+  </p><p class="player continued-line p_c_gmdesc"><b>⦿</b>
+    「해결해야 한다.」 
+  </p><p class="player continued-line p_c_gmdesc"><b>⦿</b>
+    「하지만 어떤 식으로?」 
+  </p><p class="player continued-line p_c_gmdesc"><b>⦿</b>
+    숨을 들이쉬고, 뇌세포 하나까지 끌어모아서 생각해 봅시다. 
+  </p><p class="player continued-line p_c_gmdesc"><b>⦿</b>
+    이건 어려운 얘기가 아닙니다. 
+  </p><p class="player continued-line p_c_gmdesc"><b>⦿</b>
+    예를 들면 이런 거죠. 
+  </p><p class="player continued-line p_c_gmdesc"><b>⦿</b>
+    직선으로 뻗은 고속도로 위, 한낮, 오후 3시. 
+  </p><p class="player continued-line p_c_gmdesc"><b>⦿</b>
+    핸들을 잡은 채로 계속 액셀을 밟는다면 당신이 도착할 곳은 같은 장소. 
+  </p><p class="player continued-line p_c_gmdesc"><b>⦿</b>
+    도착 지점을 다르게 하기 위해 필요한 것은 핸들을 다른 방향으로 꺾는 오만. 
+  </p><p class="player continued-line p_c_gmdesc"><b>⦿</b>
+    ⋯. 
+  </p><p class="player continued-line p_c_gmdesc"><b>⦿</b>
+    당신은 이미 일직선으로 가는 파훼법을 알고 있습니다. 
+  </p><p class="player continued-line p_c_gmdesc"><b>⦿</b>
+    7번 내내 해 온 거죠. 
+  </p><p class="player continued-line p_c_gmdesc"><b>⦿</b>
+    이젠 아주 조금만 방향을 틀면 됩니다. 
+  </p><p class="player continued-line p_c_gmdesc"><b>⦿</b>
+             
+  </p><p class="player continued-line p_c_gmdesc"><b>⦿</b>
+                「당신이 수정한 파훼법」 
+  </p><p class="player continued-line p_c_gmdesc"><b>⦿</b>
+           1. 폭탄을 어떻게 터트릴 수 있지? 
+  </p><p class="player continued-line p_c_gmdesc"><b>⦿</b>
+    ⋯ 
+  </p><p class="player continued-line p_c_gmdesc"><b>⦿</b>
+    ⋯ 
+  </p><p class="player continued-line p_c_gmdesc"><b>⦿</b>
+                 「빨간 선을 자를 거야.」 
+  </p><p class="player continued-line p_c_gmdesc"><b>⦿</b>
+    ⋯ 
+  </p><p class="player continued-line p_c_gmdesc"><b>⦿</b>
+      
+  </p><p class="player continued-line p_c_gmdesc"><b>⦿</b>
+    답지는 늘 여기에 있었어요. 
+  </p><p class="player continued-line p_c_gmdesc"><b>⦿</b>
+    그리고... 
+  </p><p class="player p_c2"><b>이치노세 아키노리</b>
+    ... ... 
+  </p><p class="player continued-line p_c2"><b>이치노세 아키노리</b>
+    왜 말이 없어. 아리야마. 
+  </p><p class="player continued-line p_c2"><b>이치노세 아키노리</b>
+    아직도 모르겠어? 
+  </p><p class="player p_c1"><b>아리야마 슈리</b>
+    ...나 빨간색 싫어하는데. 
+  </p><p class="player continued-line p_c1"><b>아리야마 슈리</b>
+    역시 파란색이 좋아. 
+  </p><p class="player p_c2"><b>이치노세 아키노리</b>
+    (피식 웃었다.) 슈리... 
+  </p><p class="player continued-line p_c2"><b>이치노세 아키노리</b>
+    빨간약과 파란약에 대해서 알고 있어? 
+  </p><p class="player continued-line p_c2"><b>이치노세 아키노리</b>
+    언제까지 파란 약만 고를 순 없어. 
+  </p><p class="player continued-line p_c2"><b>이치노세 아키노리</b>
+    난 이 윤회를 끝내고 싶어. 
+  </p><p class="player continued-line p_c2"><b>이치노세 아키노리</b>
+    ... 
+  </p><p class="player continued-line p_c2"><b>이치노세 아키노리</b>
+    해 준다고 했잖아. (어느새 조금은 원망하는 듯 한 목소리이다.) 
+  </p><p class="player p_c1"><b>아리야마 슈리</b>
+    상상만 해도 싫어. 너 혼자서만 이런 윤회에서 벗어난다는건... 
+  </p><p class="player continued-line p_c1"><b>아리야마 슈리</b>
+    그러니까 약속해. 
+  </p><p class="player continued-line p_c1"><b>아리야마 슈리</b>
+    나도 데리고 가. 
+  </p><p class="player p_c2"><b>이치노세 아키노리</b>
+    ...이러지 마, 아리야마. 
+  </p><p class="player continued-line p_c2"><b>이치노세 아키노리</b>
+    그럴 필요 없다는 거 알잖아. 
+  </p><p class="player p_c1"><b>아리야마 슈리</b>
+    싫어, 너랑 같이 있고 싶어. 
+  </p><p class="player continued-line p_c1"><b>아리야마 슈리</b>
+    역시 혼자는 외로워. 힘들고... (여덟번째, 익숙하다 못해 지루할 정도로 능숙하게 커터칼로 제 결박을 풀었다.) 
+  </p><p class="player p_c2"><b>이치노세 아키노리</b>
+    네가 어떻게... 고작 '혼자'라는 말로 정의될 수 있겠어. 
+  </p><p class="player continued-line p_c2"><b>이치노세 아키노리</b>
+    난 평생 혼자였지만... (옅게 웃었다.) 
+  </p><p class="player continued-line p_c2"><b>이치노세 아키노리</b>
+    나에게 너는 언제나 하나뿐이었어. 
+  </p><p class="player continued-line p_c2"><b>이치노세 아키노리</b>
+    그러니까 나 하나로 충분하지. 너는... 
+  </p><p class="player continued-line p_c2"><b>이치노세 아키노리</b>
+    네가 그럴 필요는 없어. 
+  </p><p class="player continued-line p_c2"><b>이치노세 아키노리</b>
+    (그리고 폭발물을 익숙하게 열었다. 빨간 선과 파란 선이 보인다.) 
+  </p><p class="player p_c1"><b>아리야마 슈리</b>
+    (왼손 약지에 낀 결혼 반지를 한번 더 꾹 눌러 깊숙히 고정했다. 충격에 꺾일 일은 없을 것이다. 그것을 잠시 확인하고 나서는 네 쪽으로 다가갔다.)  
+  </p><p class="player continued-line p_c1"><b>아리야마 슈리</b>
+    윤회를 끝내고 싶다 했지? 아키노리. 
+  </p><p class="player continued-line p_c1"><b>아리야마 슈리</b>
+    그거, 나도 마찬가지야. 죄의 무게가 너무 무겁다. (손을 뻗어 빨간 선을 잡았다.) 
+  </p><p class="player continued-line p_c1"><b>아리야마 슈리</b>
+    미안, 끝까지. (그러고는 그것을 거칠게 잡아당겨 끊어낸다.)  
+  </p><p class="player continued-line p_c1"><b>아리야마 슈리</b>
+    (...이어 순간적으로 널 끌어안아 폭탄을 제 심장께로 가져다 댔다.) 
+  </p><p class="player p_c_gmdesc"><b>⦿</b>
+    ⋯. 
+  </p><p class="player continued-line p_c_gmdesc"><b>⦿</b>
+    손가락이 전선을 파고들면 일어나는 스파크. 
+  </p><p class="player continued-line p_c_gmdesc"><b>⦿</b>
+    곧이어 일어나는 불꽃. 
+  </p><p class="player continued-line p_c_gmdesc"><b>⦿</b>
+    얼굴 끝까지 끼치는 열기. 
+  </p><p class="player continued-line p_c_gmdesc"><b>⦿</b>
+    ⋯⋯. 
+  </p><p class="player continued-line p_c_gmdesc"><b>⦿</b>
+    ⋯⋯문 밖으로부터! 
+  </p><p class="player continued-line p_c_gmdesc"><b>⦿</b>
+      
+  </p><p class="player continued-line p_c_gmdesc"><b>⦿</b>
+    이치노세의 심장 위에 달린 이게 명확히 폭탄이라고, 100퍼센트 보장받은 적은 없었습니다. 
+  </p><p class="player continued-line p_c_gmdesc"><b>⦿</b>
+    보아 왔던 관습적 이미지대로 파악한다는 것은, 당신이 사람이기 때문에 가지고 있는 편리한 습성이죠. 
+  </p><p class="player continued-line p_c_gmdesc"><b>⦿</b>
+    영화든, 소설이든, 미디어가 다루는 모든 테러 인질극에서 폭탄은 인질의 몸 위에 존재합니다. 
+  </p><p class="player continued-line p_c_gmdesc"><b>⦿</b>
+    하지만 항상 제거해 왔던 것은 오로지 트리거. 
+  </p><p class="player continued-line p_c_gmdesc"><b>⦿</b>
+    단지 시작을 알리는 장치! 
+  </p><p class="player continued-line p_c_gmdesc"><b>⦿</b>
+    트리거를 폭탄이라고 정의내렸던 단어 하나는 눈속임에 불과합니다. 
+  </p><p class="player continued-line p_c_gmdesc"><b>⦿</b>
+    갑작스레 붙들려 놀란 얼굴로 당신을 바라보던 이치노세는 굉음에 눈을 찌푸립니다. 
+  </p><p class="player continued-line p_c_gmdesc"><b>⦿</b>
+    건물 전체에 설치된 폭탄이 맨 위층부터 시작해 차례차례 터지기 시작했습니다. 
+  </p><p class="player continued-line p_c_gmdesc"><b>⦿</b>
+    사실 차례라는 단어도 큰 의미가 없어요. 
+  </p><p class="player continued-line p_c_gmdesc"><b>⦿</b>
+    거의 동시다발적으로 터지는 것에 가깝습니다. 
+  </p><p class="player continued-line p_c_gmdesc"><b>⦿</b>
+    현재 위치는 빌딩 15층. 
+  </p><p class="player continued-line p_c_gmdesc"><b>⦿</b>
+    심장이 가속하기 시작합니다. 
+  </p><p class="player continued-line p_c_gmdesc"><b>⦿</b>
+    「⋯⋯.」 
+  </p><p class="player continued-line p_c_gmdesc"><b>⦿</b>
+    「전부 터트린 뒤에야 보이는 게 있어.」 
+  </p><p class="player continued-line p_c_gmdesc"><b>⦿</b>
+    「덮어놓은 채로는 알 수 없는 것들이지.」 
+  </p><p class="player continued-line p_c_gmdesc"><b>⦿</b>
+    「얄팍한 거짓말, 도망치고 싶은 마음.」 
+  </p><p class="player continued-line p_c_gmdesc"><b>⦿</b>
+    「스스로를 속이는 얘기들, 타인을 속이고 싶은 문장들.」 
+  </p><p class="player continued-line p_c_gmdesc"><b>⦿</b>
+    「이성적으로 올바르다고 생각되는 판단.」 
+  </p><p class="player continued-line p_c_gmdesc"><b>⦿</b>
+    「혈관 속을 흘러다니는 36.5도의 감정을 애써 무시하는, 내리까는 눈동자.」 
+  </p><p class="player continued-line p_c_gmdesc"><b>⦿</b>
+      
+  </p><p class="player continued-line p_c_gmdesc"><b>⦿</b>
+    「하지만 어느 순간 영혼이 원하는 건 껍질 아래 진실.」 
+  </p><p class="player continued-line p_c_gmdesc"><b>⦿</b>
+    「그래서 인생에는 폭발이 필요한 것일지도 몰라.」 
+  </p><p class="player continued-line p_c_gmdesc"><b>⦿</b>
+      
+  </p><p class="player continued-line p_c_gmdesc"><b>⦿</b>
+    누가 말하는 것인지 모를 문장들이 먼지처럼 허공을 떠돕니다. 
+  </p><p class="player continued-line p_c_gmdesc"><b>⦿</b>
+    어느 순간부터 테러리스트나 경찰은 사라져 있습니다. 
+  </p><p class="player continued-line p_c_gmdesc"><b>⦿</b>
+    애초에 진실된 세계가 아니었으니까요. 
+  </p><p class="player continued-line p_c_gmdesc"><b>⦿</b>
+    터지는 건물, 열려 있는 거대한 창문. 
+  </p><p class="player continued-line p_c_gmdesc"><b>⦿</b>
+    아래로 보이는 것은 얼굴 없는 사람들마저도 사라진 길거리와, 근처를 가득 메운 무수한 빌딩들. 
+  </p><p class="player continued-line p_c_gmdesc"><b>⦿</b>
+    지금이라면 알 수 있습니다. 
+  </p><p class="player continued-line p_c_gmdesc"><b>⦿</b>
+    폭발을 뒤로 하고, 달려나가서. 
+  </p><p class="player continued-line p_c_gmdesc"><b>⦿</b>
+    저 콘크리트 정글에 뛰어드는 게 핸들을 꺾어버리는 가장 완벽한 방법이겠죠. 
+  </p><p class="player p_c2"><b>이치노세 아키노리</b>
+    ... ... 
+  </p><p class="player continued-line p_c2"><b>이치노세 아키노리</b>
+    아리야마. 
+  </p><p class="player continued-line p_c2"><b>이치노세 아키노리</b>
+    준비 됐어? 
+  </p><p class="player p_c1"><b>아리야마 슈리</b>
+    ... ... 
+  </p><p class="player continued-line p_c1"><b>아리야마 슈리</b>
+    어, 존나.  
+  </p><p class="player continued-line p_c1"><b>아리야마 슈리</b>
+    (이치노세 무처럼 든 채로 달려나간다.) 
+  </p><p class="player p_c_gmdesc"><b>⦿</b>
+    다시는 없을 순간을 담아내듯 눈을 크게 뜬 채로, 
+  </p><p class="player continued-line p_c_gmdesc"><b>⦿</b>
+    발을 허공으로 딛으면... ... 
+  </p><p class="player continued-line p_c_gmdesc"><b>⦿</b>
+      
+  </p><p class="player continued-line p_c_gmdesc"><b>⦿</b>
+                    「4000℃ 피날레」 
+  </p><p class="player continued-line p_c_gmdesc"><b>⦿</b>
+      
+  </p><p class="player continued-line p_c_gmdesc"><b>⦿</b>
+    다시 눈을 떴을 때는... 
+  </p><p class="player continued-line p_c_gmdesc"><b>⦿</b>
+    회색으로 도배된 정사각형 방 안에 있습니다. 
+  </p><p class="player continued-line p_c_gmdesc"><b>⦿</b>
+    이치노세가 당신의 팔을 떼어내려 몸을 움직입니다. 
+  </p><p class="player p_c1"><b>아리야마 슈리</b>
+    (어? 으어? 놓아준다.) 
+  </p><p class="player p_c2"><b>이치노세 아키노리</b>
+    (...) 나오긴 한 것 같은데... 
+  </p><p class="player continued-line p_c2"><b>이치노세 아키노리</b>
+    왜 말을 안 들어? 
+  </p><p class="player continued-line p_c2"><b>이치노세 아키노리</b>
+    정말 폭탄이었으면...! (언성이 높아진다.) 
+  </p><p class="player p_c1"><b>아리야마 슈리</b>
+    (내는 안 들린다.) 이상한 곳에서 빠져나왔더니 또 이상한 곳이네. 
+  </p><p class="player continued-line p_c1"><b>아리야마 슈리</b>
+    (벽 쪽에 가까이 다가가 괜히 통통 두드려본다. 그런 뒷모습을 보고 있으면... 그런 생각이 들지도. '이 새끼 대화를 피하고 있다.') 
+  </p><p class="player p_c2"><b>이치노세 아키노리</b>
+    ...아리야마! (결국 소리친다. 다가가 어깨를 거칠게 잡고 돌려세웠다.) 
+  </p><p class="player continued-line p_c2"><b>이치노세 아키노리</b>
+    모르는 척, 어중간하게 굴지 마. 전부 기억하잖아? 
+  </p><p class="player continued-line p_c2"><b>이치노세 아키노리</b>
+    내가 분명 그만하자고...! (여전히 언성을 높혀 너를 몰아세우다가 문득 말을 멈춘다.) 
+  </p><p class="player continued-line p_c2"><b>이치노세 아키노리</b>
+    ... ... (하. 한숨을 쉬더니 어깨를 놓아 주었다.)  
+  </p><p class="player continued-line p_c2"><b>이치노세 아키노리</b>
+    만약 잘못되었다면 나는... 마지막까지 나를 용서하지 못했을 거야. 
+  </p><p class="player continued-line p_c2"><b>이치노세 아키노리</b>
+    도대체 나한테 왜 이러는 거야? 
+  </p><p class="player p_c1"><b>아리야마 슈리</b>
+    (...제 어깨 괜히 매만진다.) 나도 모르겠어. 
+  </p><p class="player continued-line p_c1"><b>아리야마 슈리</b>
+    (그대로 한참 정적 흘리다) 너무 깊게 생각하지는 마. 늘 그랬듯이 너는 어찌할 수 없는 일이었잖아. 
+  </p><p class="player continued-line p_c1"><b>아리야마 슈리</b>
+    전부 내가 저지른거고, 내가 실수한거고, 내가 억지부린거야. ...됐지? 
+  </p><p class="player continued-line p_c1"><b>아리야마 슈리</b>
+    ...네가 날 받아주지 않았잖아. (미간이 경련하듯 짧게 구겨지다 다시 제자리로 돌아왔다.) 
+  </p><p class="player p_c2"><b>이치노세 아키노리</b>
+    ...뭐가 '모르겠어'야. 
+  </p><p class="player continued-line p_c2"><b>이치노세 아키노리</b>
+    ... ...뭐가 네 실수고, 네 억지라는 거야? 
+  </p><p class="player continued-line p_c2"><b>이치노세 아키노리</b>
+    (마른세수를 하듯 손바닥에 얼굴을 묻었다. 어느새 맨손이다.) 
+  </p><p class="player continued-line p_c2"><b>이치노세 아키노리</b>
+    (그리곤 중얼거리듯 말했다.) 전부 내 탓이잖아. 내가 너를 망친 거야... 
+  </p><p class="player continued-line p_c2"><b>이치노세 아키노리</b>
+    (고개를 든다.) ... ...그래서 그만두자고 한 건데. 
+  </p><p class="player continued-line p_c2"><b>이치노세 아키노리</b>
+    왜 끝까지 나를 이렇게 힘들게 해... (지쳤다. 한참을 소리지른 탓인지 이젠 목소리에 힘이 없었다.) 
+  </p><p class="player p_c1"><b>아리야마 슈리</b>
+    원래 사람은 서로 좀, 망치기도 하고 그러는거야... 
+  </p><p class="player continued-line p_c1"><b>아리야마 슈리</b>
+    망쳐도... (...그러다 결국 욱,하고 터져나온다.) 망쳐도 된다고! 왜 못 알아듣는데. 
+  </p><p class="player continued-line p_c1"><b>아리야마 슈리</b>
+    날 망가뜨려도 될 만큼 나한텐 네가, 의미가 있는 사람이라고.  
+  </p><p class="player continued-line p_c1"><b>아리야마 슈리</b>
+    이게 너한테는 안 느껴져? 씨발! 팔자에도 없는 남자랑 붙어먹는 짓까지 했는데. 이게 진짜로 안 느껴져?! 
+  </p><p class="player p_c2"><b>이치노세 아키노리</b>
+    (당황한 얼굴로 주춤, 뒤로 물러났다.) 너… 무슨… 
+  </p><p class="player continued-line p_c2"><b>이치노세 아키노리</b>
+    나, 나는 그냥. 나한테는 네가 망가뜨리고 싶지 않을 만큼 의미가… 
+  </p><p class="player continued-line p_c2"><b>이치노세 아키노리</b>
+    의미가, 있어서... 
+  </p><p class="player continued-line p_c2"><b>이치노세 아키노리</b>
+    … …아니야. (방 한구석을 향해 고개를 돌렸다.) 
+  </p><p class="player continued-line p_c2"><b>이치노세 아키노리</b>
+    무슨 말인지 잘 모르겠어… 그날 밤이 무슨 관련이 있다는 건지 잘… (혼란스러운 얼굴로 중얼거렸다.) 
+  </p><p class="player p_c1"><b>아리야마 슈리</b>
+    그럼 평생 그렇게 모르는 척 하면서 살던가. (아키노리 등 걷어찬다.) 
+  </p><p class="player p_c_gmdesc"><b>⦿</b>
+    이치노세는 스스로 물러난 만큼 더 밀려납니다. 
+  </p><p class="player continued-line p_c_gmdesc"><b>⦿</b>
+    당신은 그제야 주변을 제대로 둘러봅니다. 
+  </p><p class="player continued-line p_c_gmdesc"><b>⦿</b>
+    당연하게도 익숙한 장소는 아닙니다. 
+  </p><p class="player continued-line p_c_gmdesc"><b>⦿</b>
+    아마 두 사람에게 폭사의 위협과 추락사를 체험하게끔 한 것들의 아지트겠죠. 
+  </p><p class="player continued-line p_c_gmdesc"><b>⦿</b>
+    당장 주변에 돌아다니는 사람이나, 사람 이외의 생물체가 보이지는 않습니다만은. 
+  </p><p class="player continued-line p_c_gmdesc"><b>⦿</b>
+    그렇다고 해서 순순히 내보내 줄 거라고 바라는 건 너무 큰 낙관입니다. 
+  </p><p class="player continued-line p_c_gmdesc"><b>⦿</b>
+    ⋯아마도 하나, 
+  </p><p class="player continued-line p_c_gmdesc"><b>⦿</b>
+    어떤 것인지는 몰라도, 
+  </p><p class="player continued-line p_c_gmdesc"><b>⦿</b>
+    굉장히 큰 소음과 소란을 일으켜 시선을 끌 만한 것이 필요해요. 
+  </p><p class="player continued-line p_c_gmdesc"><b>⦿</b>
+    그런 것만 있다면, 이 방의 주인이 거기에 정신이 팔린 동안 유유히 도망치면 되니까. 
+  </p><p class="player continued-line p_c_gmdesc"><b>⦿</b>
+    다행히도 이 방에는 침대만 덜렁 놓여있지는 않습니다. 
+  </p><p class="player continued-line p_c_gmdesc"><b>⦿</b>
+    방의 양 벽을 가득 채운 진열대에 여러 약품들이 들어 있거든요. 
+  </p><p class="player continued-line p_c_gmdesc"><b>⦿</b>
+    진열대를 살펴볼 수 있습니다. 
+  </p><p class="player p_c1"><b>아리야마 슈리</b>
+    (한대 더 걷어차려다 한숨과 함께 그만뒀다. 이어 눈에 들어온 진열대를 살펴본다. 뿅망치 같은 건 없나.) 
+  </p><p class="player p_c_gmdesc"><b>⦿</b>
+    가장 눈에 띄는 것은. 
+  </p><p class="player continued-line p_c_gmdesc"><b>⦿</b>
+    [ 아리야마 슈리, 행운 판정 ] 
+  </p><p class="player p_c1"><b>아리야마 슈리</b><span class="dice-line">
+    cc&lt;=20 행운 (1D100&lt;=20) ＞ 79 ＞ Failure
+  </span></p><p class="player continued-line p_c1"><b>아리야마 슈리</b><span class="dice-line">
+    cc&lt;=20 행운 (1D100&lt;=20) ＞ 56 ＞ Failure
+  </span></p><p class="player p_c_gmdesc"><b>⦿</b>
+    [ 아리야마 슈리, 대신 관찰 판정 ] 
+  </p><p class="player p_c1"><b>아리야마 슈리</b><span class="dice-line">
+    cc&lt;=45 관찰력 (1D100&lt;=45) ＞ 84 ＞ Failure
+  </span></p><p class="player p_c_gmdesc"><b>⦿</b>
+    당신은 아무 병이나 하나 집어 들었습니다...만. 
+  </p><p class="player continued-line p_c_gmdesc"><b>⦿</b>
+    라벨엔 이렇게 적혀 있습니다. 
+  </p><p class="player continued-line p_c_gmdesc"><b>⦿</b>
+    [C3H5N3O9/C3H5(NO3)3] 
+  </p><p class="player p_c1"><b>아리야마 슈리</b>
+    뭐래는겨? 
+  </p><p class="player p_c_gmdesc"><b>⦿</b>
+    ... ... 
+  </p><p class="player continued-line p_c_gmdesc"><b>⦿</b>
+    당신이 처음 보는 문자의 향연에 인상을 찌푸리고 있으면. 
+  </p><p class="player p_c2"><b>이치노세 아키노리</b>
+    …니트로글리세린이야. 
+  </p><p class="player p_c_gmdesc"><b>⦿</b>
+    어느새 가까이 다가와 라벨을 확인한 이치노세가 곧장 말합니다. 
+  </p><p class="player p_c2"><b>이치노세 아키노리</b>
+    알고 있겠지만, 폭발물이고... (덧붙였다.) 
+  </p><p class="player p_c_gmdesc"><b>⦿</b>
+    당신을 바라보던 그가 주머니에서 라이터를 꺼내 보입니다. 
+  </p><p class="player continued-line p_c_gmdesc"><b>⦿</b>
+    잠시의 눈빛 교환. 
+  </p><p class="player continued-line p_c_gmdesc"><b>⦿</b>
+    그리고 그가 묻습니다. 
+  </p><p class="player p_c2"><b>이치노세 아키노리</b>
+    아리야마. 이곳에서 무사히 나간다면...  
+  </p><p class="player continued-line p_c2"><b>이치노세 아키노리</b>
+    널 망치지 않고 함께할 방법을 알려 줘. 
+  </p><p class="player continued-line p_c2"><b>이치노세 아키노리</b>
+    역시 널... 그러고 싶지는 않아서. 
+  </p><p class="player continued-line p_c2"><b>이치노세 아키노리</b>
+    그래 줄 수 있어? 
+  </p><p class="player p_c1"><b>아리야마 슈리</b>
+    ...센스가 다 죽었네. 
+  </p><p class="player continued-line p_c1"><b>아리야마 슈리</b>
+    일주일 내내 처 얻어맞고 나서야 그런 이야기를 꺼내고. 
+  </p><p class="player continued-line p_c1"><b>아리야마 슈리</b>
+    그리고 담배 안 피운다며? (네 라이터 뺏어들었다.) 
+  </p><p class="player continued-line p_c1"><b>아리야마 슈리</b>
+    나랑 함께하려면 일단 솔직해지는 법부터 배워. 
+  </p><p class="player p_c2"><b>이치노세 아키노리</b>
+    하하. (실없이 웃었다.) 솔직해지라고... 
+  </p><p class="player continued-line p_c2"><b>이치노세 아키노리</b>
+    ... ... 
+  </p><p class="player continued-line p_c2"><b>이치노세 아키노리</b>
+    그래. 나도 사랑해. 
+  </p><p class="player p_c_gmdesc"><b>⦿</b>
+    그리고 그는 당신이 가져간 라이터를 뺏어 들고. 
+  </p><p class="player continued-line p_c_gmdesc"><b>⦿</b>
+    점화. 
+  </p><p class="player continued-line p_c_gmdesc"><b>⦿</b>
+    당신이 들고 있는 병에 던져 넣습니다. 
+  </p><p class="player continued-line p_c_gmdesc"><b>⦿</b>
+      
+  </p><p class="player continued-line p_c_gmdesc"><b>⦿</b>
+    ⋯⋯. 
+  </p><p class="player continued-line p_c_gmdesc"><b>⦿</b>
+    터져나가는 콘크리트 벽과 날아가는 문. 
+  </p><p class="player continued-line p_c_gmdesc"><b>⦿</b>
+    연속되는 폭발을 뒤로 하고 달려나가는 두 사람. 
+  </p><p class="player continued-line p_c_gmdesc"><b>⦿</b>
+    어째서인지 무섭지도 않습니다. 
+  </p><p class="player continued-line p_c_gmdesc"><b>⦿</b>
+    죽을지도 모른다는 심정으로 다리의 근육을 끝까지 쥐어짜내면, 
+  </p><p class="player continued-line p_c_gmdesc"><b>⦿</b>
+    오히려 몸을 울리는 것은 지금이야말로 내가 살아있다는 기분. 
+  </p><p class="player continued-line p_c_gmdesc"><b>⦿</b>
+    ⋯⋯. 
+  </p><p class="player continued-line p_c_gmdesc"><b>⦿</b>
+    ⋯⋯. 
+  </p><p class="player continued-line p_c_gmdesc"><b>⦿</b>
+    소설과 영화, 그리고 그래픽 위에 정교히 쌓아올려진 게임에서. 
+  </p><p class="player continued-line p_c_gmdesc"><b>⦿</b>
+    터져나가는 엔딩에 사람들은 줄곧 열광해 왔다. 
+  </p><p class="player continued-line p_c_gmdesc"><b>⦿</b>
+    스토리 끝의 카타르시스. 
+  </p><p class="player continued-line p_c_gmdesc"><b>⦿</b>
+    머리 안을 가득 채우는 해방감. 
+  </p><p class="player continued-line p_c_gmdesc"><b>⦿</b>
+    그러나 모두가 지나친 열기에 환호하는 이유는 그뿐만이 아니다. 
+  </p><p class="player continued-line p_c_gmdesc"><b>⦿</b>
+    인간이라면 한번씩은 생각해보는 것이다. 
+  </p><p class="player p_c2"><b>이치노세 아키노리</b>
+    「사회가 쌓아올린 규칙.」 
+  </p><p class="player continued-line p_c2"><b>이치노세 아키노리</b>
+    「정상성과 뒤틀리지 않은 길.」 
+  </p><p class="player continued-line p_c2"><b>이치노세 아키노리</b>
+    「거짓말만 하는 나와.」 
+  </p><p class="player continued-line p_c2"><b>이치노세 아키노리</b>
+    「거짓말을 모른 척 하는 당신과.」 
+  </p><p class="player continued-line p_c2"><b>이치노세 아키노리</b>
+    「반듯한 인생을 뒤엎어보고 싶다고.」 
+  </p><p class="player continued-line p_c2"><b>이치노세 아키노리</b>
+    「가장 강렬하게 살았을 때 그 아래에는 진정한 무언가가 있을 것이라고.」 
+  </p><p class="player continued-line p_c2"><b>이치노세 아키노리</b>
+    「나 자신이든, 아니면 눈앞에 있는 당신이든.」 
+  </p><p class="player continued-line p_c2"><b>이치노세 아키노리</b>
+    「⋯⋯.」 
+  </p><p class="player continued-line p_c2"><b>이치노세 아키노리</b>
+                                  그래서. 
+  </p><p class="player continued-line p_c2"><b>이치노세 아키노리</b>
+                 우리는 항상 동경해 온 거야. 
+  </p><p class="player continued-line p_c2"><b>이치노세 아키노리</b>
+                         4000℃의 열기를! 
+  </p><p class="player p_c_gmdesc"><b>⦿</b>
+      
+  </p><p class="player continued-line p_c_gmdesc"><b>⦿</b>
+      
+  </p><p class="player continued-line p_c_gmdesc"><b>⦿</b>
+    &nbsp; &nbsp; &nbsp; &nbsp; •······································• 
+  </p><p class="player continued-line p_c_gmdesc"><b>⦿</b>
+            「BLOW SOMETHING UP」 
+  </p><p class="player continued-line p_c_gmdesc"><b>⦿</b>
+      
+  </p><p class="player chapter-title continued-line p_c_gmdesc"><b>⦿</b>
+    「ED. 들어 봐, 세상이 우리를 이렇게 만든 거야」 
+  </p><p class="player continued-line p_c_gmdesc"><b>⦿</b>
+                 KPC  이치노세 아키노리     생환 
+  </p><p class="player continued-line p_c_gmdesc"><b>⦿</b>
+                     PC   아리야마 슈리     생환 
+  </p><p class="player continued-line p_c_gmdesc"><b>⦿</b>
+      
+  </p></div></div><script>document.querySelectorAll('.toggle-switch input').forEach(i => { i.onchange = function(){ document.querySelectorAll('.'+this.dataset.target).forEach(el => el.classList.toggle('hidden-tab', !this.checked)); }; });</script></div></body></html>
